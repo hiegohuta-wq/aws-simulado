@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Simulado AWS Certified - PWA Offline</title>
+  
+  <!-- Mobile & PWA Optimizations -->
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AWS Simulado">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><path d='M20,50 Q50,20 80,50 Q50,80 20,50' stroke='%23ff9900' stroke-width='8' fill='none'/><text x='50' y='58' font-size='22' font-weight='bold' fill='%23ffffff' text-anchor='middle'>AWS</text></svg>">
+
+  <!-- Embedded Web App Manifest -->
+  <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIlNpbXVsYWRvIEFXUyBDZXJ0aWZpZWQgT2ZmbGluZSIsCiAgInNob3J0X25hbWUiOiAiQVdTIFNpbXVsYWRvIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGYxNzJhIiwKICAidGhlbWVfY29sb3IiOiAiIzBmMTcyYSIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjxyZWN0IHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJyByeD0nMjAnIGZpbGw9JyUwZjE3MmEnLz48cGF0aCBkPSdNMjAsNTAgUTUwLDIwIDgwLDUwIFE1MCw4MCAyMCw1MCcgc3Ryb2tlPSclMjNmZjk5MDAnIHN0cm9rZS13aWR0aD0nOCcgZmlsbD0nbm9uZScvPjx0ZXh0IHg9JzUwJyB5PSc1OCcgZm9udC1zaXplPScyMicgZm9udC13ZWlnaHQ9J2JvbGQnIGZpbGw9JyUyM2ZmZmZmZicgdGV4dC1hbmNob3I9J21pZGRsZSc+QVdTPC90ZXh0Pjwvc3ZnPiIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=">
+
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --primary-aws: #ff9900;
+      --primary-aws-dark: #cc7a00;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #22c55e;
+      --accent-green-bg: rgba(34, 197, 94, 0.15);
+      --accent-red: #ef4444;
+      --accent-red-bg: rgba(239, 68, 68, 0.15);
+      --border-color: #334155;
+      --nav-height: 65px;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      padding-bottom: calc(var(--nav-height) + 10px);
+    }
+
+    /* Header Styling */
+    header {
+      background-color: #090d16;
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      background: var(--primary-aws);
+      color: #000;
+      font-weight: 900;
+      font-size: 0.9rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .badge-offline {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--accent-green);
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+    }
+
+    .badge-offline.offline {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--accent-red);
+      border-color: var(--accent-red);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: currentColor;
+    }
+
+    main {
+      flex: 1;
+      padding: 16px;
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Question & Answers */
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .question-number {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-aws);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .bookmark-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+    }
+
+    .bookmark-btn.active {
+      color: var(--primary-aws);
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.45;
+      margin-bottom: 20px;
+      user-select: text;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background-color: #111827;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      text-align: left;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1.35;
+      width: 100%;
+    }
+
+    .option-btn:active {
+      transform: scale(0.98);
+      background-color: var(--bg-card-hover);
+    }
+
+    .option-btn.selected {
+      border-color: var(--primary-aws);
+      background-color: rgba(255, 153, 0, 0.1);
+    }
+
+    .option-btn.correct {
+      border-color: var(--accent-green);
+      background-color: var(--accent-green-bg);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .option-btn.incorrect {
+      border-color: var(--accent-red);
+      background-color: var(--accent-red-bg);
+      color: #ffffff;
+    }
+
+    .option-btn.disabled {
+      pointer-events: none;
+    }
+
+    .option-prefix {
+      font-weight: 700;
+      margin-right: 12px;
+      display: inline-block;
+      min-width: 20px;
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      background-color: #0f172a;
+      border-left: 4px solid var(--primary-aws);
+      display: none;
+    }
+
+    .explanation-box.visible {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+
+    .explanation-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-aws);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .explanation-text {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      line-height: 1.4;
+      user-select: text;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      background-color: var(--bg-card-hover);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      min-height: 48px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex: 1;
+      transition: background 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-aws);
+      color: #0f172a;
+      border: none;
+      font-weight: 700;
+    }
+
+    .btn-primary:active {
+      background-color: var(--primary-aws-dark);
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background-color: #090d16;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 25%;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .nav-item.active {
+      color: var(--primary-aws);
+    }
+
+    .nav-icon {
+      font-size: 1.3rem;
+    }
+
+    /* Dashboard & Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat-card {
+      background-color: #111827;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary-aws);
+    }
+
+    .stat-lbl {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .progress-bar-bg {
+      background-color: #111827;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-bar-fill {
+      background-color: var(--primary-aws);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Exam Timer */
+    .timer-badge {
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 1.1rem;
+      background: #111827;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      color: var(--primary-aws);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background-color: var(--primary-aws);
+      color: #0f172a;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 200;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* PWA Install Banner */
+    .pwa-banner {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid var(--primary-aws);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pwa-banner.show {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Container -->
+  <div id="toast" class="toast">Mensagem</div>
+
+  <header>
+    <div class="brand">
+      <span class="brand-logo">AWS</span>
+      <span class="brand-title">Simulado Certified</span>
+    </div>
+    <div id="offline-badge" class="badge-offline">
+      <span class="status-dot"></span>
+      <span id="offline-text">Offline Pronto</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- VIEW 1: HOME DASHBOARD -->
+    <section id="view-home" class="view active">
+      <div id="pwa-banner" class="pwa-banner">
+        <div>
+          <div style="font-weight:700; font-size:0.95rem; color: var(--primary-aws);">Instalar Aplicativo</div>
+          <div style="font-size:0.8rem; color: var(--text-muted);">Use 100% Offline na Tela Inicial</div>
+        </div>
+        <button id="pwa-install-btn" class="btn btn-primary" style="padding: 6px 12px; min-height: 36px; font-size: 0.8rem;">Instalar</button>
+      </div>
+
+      <div class="card">
+        <h2>Simulado AWS - 86 Questões</h2>
+        <p>Prepare-se para a certificação com o banco de dados oficial completo. Funciona 100% offline em seu dispositivo mobile.</p>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-val" id="stat-completed">0/86</div>
+            <div class="stat-lbl">Respondidas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="stat-accuracy">0%</div>
+            <div class="stat-lbl">Precisão</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted);">
+            <span>Progresso Geral</span>
+            <span id="stat-progress-pct">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="stat-progress-fill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <button class="btn btn-primary" onclick="startStudyMode()" style="justify-content: flex-start; padding: 16px;">
+          <span style="font-size: 1.4rem; margin-right: 8px;">📖</span>
+          <div style="text-align: left;">
+            <div style="font-size: 1.05rem;">Modo Estudo</div>
+            <div style="font-size: 0.75rem; font-weight: normal; opacity: 0.9;">Feedback imediato e explicações detalhadas</div>
+          </div>
+        </button>
+
+        <button class="btn" onclick="startExamMode()" style="justify-content: flex-start; padding: 16px;">
+          <span style="font-size: 1.4rem; margin-right: 8px;">⏱️</span>
+          <div style="text-align: left;">
+            <div style="font-size: 1.05rem;">Modo Simulado</div>
+            <div style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">Com cronômetro, sem feedback imediato</div>
+          </div>
+        </button>
+
+        <button class="btn" onclick="switchView('view-bookmarks')" style="justify-content: flex-start; padding: 16px;">
+          <span style="font-size: 1.4rem; margin-right: 8px;">⭐</span>
+          <div style="text-align: left;">
+            <div style="font-size: 1.05rem;">Questões Salvas</div>
+            <div style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">Revisar favoritos para estudo focado</div>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 2: QUIZ / STUDY VIEW -->
+    <section id="view-quiz" class="view">
+      <div class="question-header">
+        <span class="question-number" id="quiz-q-num">Questão 1 de 86</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span id="quiz-timer" class="timer-badge" style="display: none;">00:00</span>
+          <button id="quiz-bookmark-btn" class="bookmark-btn" onclick="toggleBookmarkCurrent()">★</button>
+        </div>
+      </div>
+
+      <div class="progress-bar-bg" style="height: 6px; margin-top: 0;">
+        <div id="quiz-progress-fill" class="progress-bar-fill"></div>
+      </div>
+
+      <div class="card" style="margin-top: 12px;">
+        <div class="question-text" id="quiz-q-text">Carregando pergunta...</div>
+        <div class="options-grid" id="quiz-options-container">
+          <!-- Options injected via JS -->
+        </div>
+
+        <div id="quiz-explanation" class="explanation-box">
+          <div class="explanation-title">💡 Comentário Explicativo</div>
+          <div class="explanation-text" id="quiz-explanation-text">...</div>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <button class="btn" onclick="prevQuestion()" id="btn-prev">← Anterior</button>
+        <button class="btn btn-primary" onclick="nextQuestion()" id="btn-next">Próxima →</button>
+      </div>
+    </section>
+
+    <!-- VIEW 3: BOOKMARKS -->
+    <section id="view-bookmarks" class="view">
+      <h2>⭐ Questões Salvas</h2>
+      <p style="margin-bottom: 16px;">Questões que você marcou para revisão rápida.</p>
+      
+      <div id="bookmarks-list" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 4: RESULTS -->
+    <section id="view-results" class="view">
+      <div class="card" style="text-align: center;">
+        <h2>Resultado do Simulado</h2>
+        <div style="font-size: 3rem; font-weight: 900; color: var(--primary-aws); margin: 10px 0;" id="res-score">0%</div>
+        <p id="res-msg">Você concluiu o simulado!</p>
+
+        <div class="stats-grid" style="margin-top: 20px;">
+          <div class="stat-card">
+            <div class="stat-val" id="res-correct" style="color: var(--accent-green);">0</div>
+            <div class="stat-lbl">Acertos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="res-wrong" style="color: var(--accent-red);">0</div>
+            <div class="stat-lbl">Erros</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn btn-primary" onclick="startStudyMode()">Voltar ao Modo Estudo</button>
+        <button class="btn" onclick="resetProgress()">Zerar Meu Histórico</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchView('view-home')" id="nav-home">
+      <span class="nav-icon">🏠</span>
+      <span>Início</span>
+    </button>
+    <button class="nav-item" onclick="startStudyMode()" id="nav-study">
+      <span class="nav-icon">📖</span>
+      <span>Estudo</span>
+    </button>
+    <button class="nav-item" onclick="startExamMode()" id="nav-exam">
+      <span class="nav-icon">⏱️</span>
+      <span>Simulado</span>
+    </button>
+    <button class="nav-item" onclick="switchView('view-bookmarks')" id="nav-bookmarks">
+      <span class="nav-icon">⭐</span>
+      <span>Favoritos</span>
+    </button>
+  </nav>
+
+  <script>
+    /* Complete Database with 86 AWS Questions & Comments */
+    const QUESTIONS = [
+      { id: 1, title: "AWS Application Discovery Service", correct: "Identificar e avaliar dependências de aplicativos e servidores locais", dist: ["Orquestrar contêineres Docker em larga escala", "Gerenciar chaves de criptografia KMS", "Implantar infraestrutura como código"], comm: "O AWS Application Discovery Service ajuda no planejamento de projetos de migração para a nuvem ao coletar dados sobre servidores e aplicativos locais." },
+      { id: 2, title: "AWS License Manager", correct: "Gerenciamento e conformidade de licenças de software", dist: ["Armazenamento de objetos com alta disponibilidade", "Distribuição global de conteúdo CDN", "Consultas SQL em tempo real no S3"], comm: "O AWS License Manager permite gerenciar e rastrear licenças de software de fornecedores como Microsoft, Oracle e IBM." },
+      { id: 3, title: "Amazon DynamoDB", correct: "Banco NoSQL chave-valor serverless de baixa latência", dist: ["Banco de dados relacional SQL baseado em MySQL", "Serviço de migração de data centers físicos", "Firewall de aplicação web gerenciado"], comm: "O DynamoDB é um banco de dados NoSQL chave-valor e documentos totalmente gerenciado e projetado para latência de milissegundos." },
+      { id: 4, title: "AWS CAF - Perspectiva de Segurança", correct: "Monitoramento de atividades/auditoria, controles de acesso e proteção de dados", dist: ["Dimensionamento de servidores EC2 e instâncias RDS", "Criação de tabelas de roteamento em VPCs", "Configuração de pipelines CI/CD com CodeDeploy"], comm: "A perspectiva de segurança do AWS Cloud Adoption Framework (CAF) foca na governança de acesso, auditoria e criptografia." },
+      { id: 5, title: "AWS Batch", correct: "Execução de processos em lote com escalabilidade automática", dist: ["Serviço de mensageria Pub/Sub para aplicativos", "Hospedagem de sites estáticos com HTTPS", "DNS gerenciado com roteamento de latência"], comm: "O AWS Batch permite que desenvolvedores executem com eficiência centenas de milhares de tarefas em lote na AWS." },
+      { id: 6, title: "Amazon S3", correct: "Armazenamento de objetos para documentos com versionamento", dist: ["Volume de bloco de alto desempenho para EC2", "Serviço de arquivo de rede compartilhado NFS", "Cache na memória com tecnologia Redis"], comm: "O Amazon S3 é ideal para armazenamento de objetos, oferecendo versionamento, segurança e durabilidade de 99.999999999%." },
+      { id: 7, title: "Simple Storage Service (S3)", correct: "Preço em camadas e descontos por volume de dados", dist: ["Preço fixo anual independentemente do uso", "Cobrança apenas pelo número de requisições HTTP sem considerar armazenamento", "Gratuito para volumes de dados acima de 100 TB"], comm: "O S3 oferece preços baseados na quantidade de dados armazenados, com descontos automáticos por volume à medida que o uso cresce." },
+      { id: 8, title: "Modelo de Cobrança AWS", correct: "Pagamento conforme o uso (pay-as-you-go)", dist: ["Contrato obrigatório de 5 anos com valor mensal fixo", "Licenciamento por usuário individual da plataforma", "Cobrança baseada exclusivamente no tráfego de entrada"], comm: "O modelo pay-as-you-go permite pagar apenas pelos recursos computacionais realmente consumidos, sem custos iniciais." },
+      { id: 9, title: "AWS Control Tower", correct: "Gerenciamento centralizado e governança para múltiplas contas", dist: ["Compilação automática de código-fonte de aplicações", "Envio de notificações por SMS para clientes finais", "Execução de scripts de automação em lote"], comm: "O Control Tower oferece a maneira mais simples de configurar e governar um ambiente AWS seguro e com múltiplas contas." },
+      { id: 10, title: "Amazon RDS Multi-AZ", correct: "Alta disponibilidade e failover síncrono automático", dist: ["Aumento exclusivo de desempenho em consultas SELECT", "Redução de custos de armazenamento em 50%", "Transformação automática de SQL para NoSQL"], comm: "A implantação Multi-AZ fornece alta disponibilidade e tolerância a falhas para bancos de dados RDS via replicação síncrona." },
+      { id: 11, title: "Limites do Amazon RDS", correct: "100 snapshots manuais de DB por região", dist: ["10 snapshots por conta global", "Snapshots ilimitados sem qualquer cota", "Snapshots manuais expiram obrigatoriamente após 24h"], comm: "Por padrão, o Amazon RDS limita em 100 o número de snapshots manuais de banco de dados que você pode criar por região." },
+      { id: 12, title: "Regras de Nomes de Buckets S3", correct: "3 a 63 caracteres, apenas minúsculas, números, pontos e hífens", dist: ["Qualquer comprimento e uso de caracteres maiúsculos livremente", "Início obrigatório com o prefixo 'aws-bucket-'", "Formato de endereço IP numérico válido"], comm: "Os nomes de buckets do S3 devem ter entre 3 e 63 caracteres e consistir apenas em letras minúsculas, números, pontos e hífens." },
+      { id: 13, title: "AWS IAM", correct: "Autenticação federada, MFA e políticas detalhadas de acesso", dist: ["Proteção física contra invasões em data centers", "Instalação de atualizações de SO no Amazon EC2", "Monitoramento de tráfego de rede física"], comm: "O IAM gerencia identidades e acessos com recursos como MFA, federação de identidades e políticas em formato JSON." },
+      { id: 14, title: "Amazon EMR", correct: "Plataforma Big Data para processamento com Spark, Hive e HBase", dist: ["Serviço de envio de e-mails em massa", "Roteador de tráfego para redes privadas virtuais", "Repositório de código-fonte Git gerenciado"], comm: "O EMR simplifica a execução de frameworks de Big Data como Apache Spark e Hadoop na AWS." },
+      { id: 15, title: "Grupos do IAM", correct: "Gerenciar permissões de acesso para múltiplos usuários por equipe", dist: ["Executar código serverless automaticamente", "Armazenar arquivos confidenciais criptografados", "Criar instâncias virtuais com IPs estáticos"], comm: "Grupos do IAM permitem aplicar políticas de permissão a múltiplos usuários simultaneamente, facilitando a governança." },
+      { id: 16, title: "AWS CloudFormation", correct: "Infraestrutura como Código (IaC) com modelos JSON ou YAML", dist: ["Gerenciador de contêineres Kubernetes em nuvem", "Análise preditiva de vendas com inteligência artificial", "Balanceador de carga para tráfego web"], comm: "O CloudFormation permite modelar e provisionar recursos de infraestrutura da AWS usando modelos em declarativos." },
+      { id: 17, title: "AWS Service Catalog", correct: "Criar e gerenciar catálogos de serviços de TI aprovados", dist: ["Analisar histórico de navegação dos usuários", "Armazenar logs do sistema operacional EC2", "Converter texto em voz em tempo real"], comm: "O AWS Service Catalog permite que organizações criem e gerenciem catálogos de serviços de TI aprovados para uso na AWS." },
+      { id: 18, title: "Cálculo de TCO (Custo Total de Posse)", correct: "Hardware, manutenção, energia, espaço físico e mão de obra", dist: ["Apenas a fatura mensal do provedor de internet", "Somente os custos de aquisição de software e licenças", "Exclusivamente despesas com marketing e suporte ao cliente"], comm: "O TCO compara os custos totais diretos e indiretos de manter um data center local versus migrar para a nuvem AWS." },
+      { id: 19, title: "Suporte AWS e Trusted Advisor Completo", correct: "Planos Business, Enterprise On-Ramp e Enterprise", dist: ["Plano Basic gratuito", "Plano Developer", "Todos os planos sem exceção"], comm: "As verificações completas do AWS Trusted Advisor estão disponíveis apenas nos planos Business, Enterprise On-Ramp e Enterprise." },
+      { id: 20, title: "RDS vs DynamoDB", correct: "RDS é SQL relacional; DynamoDB é NoSQL chave-valor", dist: ["RDS é serverless NoSQL; DynamoDB exige servidores dedicados", "Ambos são bancos de dados chave-valor idênticos", "DynamoDB não suporta criptografia nem escalabilidade"], comm: "RDS é voltado para bancos de dados relacionais estruturados (SQL), enquanto DynamoDB é um NoSQL chave-valor de alta performance." },
+      { id: 21, title: "AWS CodeDeploy", correct: "Automação de implantação de aplicações na etapa final do CI/CD", dist: ["Compilação do código-fonte e testes unitários", "Análise de vulnerabilidades em tempo de execução", "Gerenciamento de repositórios Git na nuvem"], comm: "O CodeDeploy automatiza as implantações de código em instâncias EC2, AWS Fargate, AWS Lambda ou servidores locais." },
+      { id: 22, title: "Amazon CloudFront", correct: "Rede de Entrega de Conteúdo (CDN) global para reduzir latência", dist: ["Instância de banco de dados gráfico de alta velocidade", "Serviço de backup físico em fita magnética", "Plataforma de criação de microsserviços sem servidor"], comm: "O CloudFront entrega dados, vídeos, aplicações e APIs a clientes globais com baixa latência e alta velocidade via edge locations." },
+      { id: 23, title: "AWS Fargate", correct: "Motor de computação serverless para contêineres sem gerenciar servidores", dist: ["Máquina virtual tradicional com acesso root ao SO", "Serviço de banco de dados em memória gerenciado", "Armazenamento de arquivos de blocos de altíssima performance"], comm: "O Fargate permite executar contêineres ECS e EKS sem a necessidade de provisionar ou gerenciar servidores EC2." },
+      { id: 24, title: "Amazon ECS e EKS", correct: "Orquestração de microsserviços containerizados", dist: ["Gerenciamento de registros de nomes de domínio DNS", "Faturamento e consolidação de faturas de cartão de crédito", "Tradução automática de idiomas com aprendizado profundo"], comm: "ECS (proprietário AWS) e EKS (Kubernetes gerenciado) são serviços de orquestração para aplicações containerizadas." },
+      { id: 25, title: "Amazon MSK", correct: "Serviço totalmente gerenciado para Apache Kafka", dist: ["Servidor de e-mail corporativo compatível com IMAP", "Plataforma de machine learning para visão computacional", "Banco de dados relacional compativel com PostgreSQL"], comm: "O Amazon MSK facilita a criação e execução de aplicações que usam o Apache Kafka para processamento de streams de dados." },
+      { id: 26, title: "AWS WAF vs Firewall Manager", correct: "WAF bloqueia ataques em apps web; Firewall Manager gerencia regras em escala multi-conta", dist: ["WAF gerencia faturas; Firewall Manager cifra dados no S3", "WAF protege roteadores físicos; Firewall Manager é um antivírus local", "Ambos realizam exatamente a mesma função sem diferenças"], comm: "O WAF filtra tráfego web malicioso (SQLi, XSS); o Firewall Manager centraliza o gerenciamento dessas regras em múltiplas contas." },
+      { id: 27, title: "Amazon EBS", correct: "Armazenamento persistente em nível de bloco para instâncias EC2", dist: ["Armazenamento de objetos acessível diretamente pela web", "Banco de dados relacional baseado em MySQL", "Serviço de caching na memória RAM"], comm: "O Amazon EBS oferece volumes de armazenamento de blocos de alto desempenho para uso com instâncias Amazon EC2." },
+      { id: 28, title: "Autenticação Multifator (MFA)", correct: "Camada adicional de proteção que exige dois ou mais fatores de verificação", dist: ["Troca obrigatória de senha a cada 7 dias", "Acesso liberado apenas de endereços IP governamentais", "Eliminação completa da necessidade de senhas de acesso"], comm: "O MFA adiciona uma camada extra de segurança requerendo um código temporário de um dispositivo autorizado além da senha." },
+      { id: 29, title: "AWS Database Migration Service (DMS)", correct: "Migração segura de bancos de dados com mínima interrupção", dist: ["Conversão automática de vídeos para resolução 4K", "Backup de arquivos de computadores pessoais de funcionários", "Monitoramento de temperatura física de data centers"], comm: "O AWS DMS ajuda a migrar bancos de dados para a AWS de forma rápida e segura, mantendo a fonte operacional durante a migração." },
+      { id: 30, title: "AWS Global Accelerator", correct: "Otimização de rotas e tráfego na rede global da AWS para melhorar a performance", dist: ["Aumento da velocidade do processador do servidor EC2", "Compactação automática de tabelas do DynamoDB", "Criação de nomes de domínio personalizados"], comm: "O Global Accelerator usa a infraestrutura de rede global da AWS para melhorar a disponibilidade e a performance do tráfego dos usuários." },
+      { id: 31, title: "AWS SDKs", correct: "Conjunto de bibliotecas para integração e programação em Java, Python, C#, etc.", dist: ["Documentação em papel para instalação de hardware", "Painel web de faturamento simplificado", "Ambiente físico de testes em data centers AWS"], comm: "Os SDKs da AWS facilitam a integração de serviços AWS diretamente em aplicações escritas em linguagens populares." },
+      { id: 32, title: "Amazon SNS", correct: "Serviço de mensagens Pub/Sub para envio de notificações a múltiplos assinantes", dist: ["Serviço de banco de dados relacional serverless", "Armazenamento de arquivos de acesso infrequente", "Gerenciamento de certificados de segurança SSL"], comm: "O SNS é um serviço gerenciado de mensagens pub/sub que permite desacoplar microsserviços e enviar notificações por SMS/e-mail." },
+      { id: 33, title: "AWS Budgets", correct: "Criar orçamentos personalizados e alertas automáticos de custos e uso", dist: ["Pagamento automático das faturas do cartão de crédito", "Recompensa financeira por metas de economia atingidas", "Emissão de notas ficais para órgãos governamentais"], comm: "O AWS Budgets permite definir orçamentos personalizados e receber alertas quando seus custos excederem os limites estipulados." },
+      { id: 34, title: "Amazon API Gateway", correct: "Criação, publicação, manutenção e proteção de APIs RESTful e WebSocket", dist: ["Roteador físico de alta velocidade para conexões via fibra", "Gerenciador de máquinas virtuais Windows Server", "Ferramenta de edição de código no navegador"], comm: "O API Gateway é um serviço totalmente gerenciado para criar, publicar e proteger APIs em qualquer escala." },
+      { id: 35, title: "Amazon MQ", correct: "Corretor de mensagens gerenciado compatível com ActiveMQ e RabbitMQ", dist: ["Plataforma de execução de código Python sem servidores", "Banco de dados chave-valor NoSQL de altíssima escala", "Gerenciador de DNS global com baixa latência"], comm: "O Amazon MQ facilita a migração para corretores de mensagens existentes sem necessidade de reescrever o código de mensagens." },
+      { id: 36, title: "AWS Glue", correct: "Serviço de integração de dados e ETL (Extração, Transformação e Carga) serverless", dist: ["Ferramenta de colagem e edição gráfica de fotos", "Motor de busca de vulnerabilidades de rede", "Serviço de autenticação de chamadas telefônicas"], comm: "O AWS Glue é um serviço ETL sem servidor que simplifica a descoberta, preparação e combinação de dados para análise." },
+      { id: 37, title: "AWS CLI", correct: "Ferramenta de linha de comando para automação e controle de serviços AWS", dist: ["Interface gráfica exclusiva para sistemas Android", "Cabo físico de conexão direta à AWS", "Linguagem de programação proprietária da AWS"], comm: "A AWS CLI permite controlar múltiplos serviços da AWS a partir da linha de comando e automatizá-los por scripts." },
+      { id: 38, title: "Conceito de PaaS (Plataforma como Serviço)", correct: "Foco no desenvolvimento do código sem preocupação com infraestrutura subjacente", dist: ["Gerenciamento do hardware físico, cabos e geradores do data center", "Aluguel exclusivo de espaço físico em hack de data center", "Uso de softwares prontos no modelo de assinatura mensal final"], comm: "PaaS remove a necessidade de gerenciar a infraestrutura subjacente (como SO e patches), permitindo focar na aplicação." },
+      { id: 39, title: "Pilares do Well-Architected Framework", correct: "Excelência Operacional, Segurança, Confiabilidade, Desempenho, Custos, Sustentabilidade", dist: ["Velocidade, Preço, Lucratividade, Inovação, Vendas", "Hardware, Software, Redes, Armazenamento, Pessoas", "Desenvolvimento, Testes, Homologação, Produção, Descarte"], comm: "Os 6 pilares guiam arquitetos a construir infraestruturas seguras, de alto desempenho, resilientes e eficientes na AWS." },
+      { id: 40, title: "Amazon Lightsail", correct: "VPS simples e econômico ideal para pequenas aplicações e blogs WordPress", dist: ["Supercomputador para simulações genéticas e físicas", "Armazenamento frio para retenção de dados por 10 anos", "Banco de dados relacional distribuído globalmente"], comm: "O Lightsail oferece instâncias virtuais, armazenamento e redes simplificados a um preço mensal fixo e acessível." },
+      { id: 41, title: "AWS Cost Explorer", correct: "Visualização, análise e relatórios detalhados de custos e uso ao longo do tempo", dist: ["Simulador de ataques de hackers à sua conta", "Ferramenta para renegociar faturas atrasadas", "Gerador automático de código de integração em Python"], comm: "O Cost Explorer possui uma interface fácil de usar para visualizar e analisar os padrões de custo e uso da AWS ao longo do tempo." },
+      { id: 42, title: "Amazon CloudWatch", correct: "Monitoramento de métricas, coleta de logs e criação de alarmes em tempo real", dist: ["Serviço de hospedagem de domínios web", "Plataforma de vídeo sob demanda para streaming", "Gerenciador de licenças de software corporativo"], comm: "O CloudWatch monitora seus recursos e aplicações da AWS em tempo real, coletando métricas e acionando alarmes." },
+      { id: 43, title: "Amazon EC2 (IaaS)", correct: "Gerenciamento total do sistema operacional, configurações e softwares pelo cliente", dist: ["Serviço totalmente gerenciado onde a AWS atualiza o SO automaticamente", "Armazenamento serverless de arquivos do usuário", "Rede de entrega de conteúdo distribuída"], comm: "No EC2, o usuário possui controle total do SO (IaaS), responsabilizando-se por patches, atualizações e configurações." },
+      { id: 44, title: "Desacoplamento de Arquitetura", correct: "Redução de interdependências para que a falha de um componente não pare o sistema", dist: ["Aumento da dependência direta entre o banco de dados e a interface gráfica", "Combinação de todo o código da aplicação em um único arquivo gigante", "Desligamento automático da aplicação aos fins de semana"], comm: "Arquiteturas desacopladas (usando SQS/SNS) garantem que componentes operem independentemente, aumentando a resiliência." },
+      { id: 45, title: "AWS CloudShell", correct: "Terminal baseado em navegador pré-autenticado com ferramentas AWS CLI prontas", dist: ["Editor gráfico de imagens armazenadas no S3", "Servidor de banco de dados NoSQL de alto desempenho", "Conexão VPN privada em nível de hardware"], comm: "O CloudShell é um shell baseado em navegador que facilita o acesso rápido e seguro aos recursos da AWS via linha de comando." },
+      { id: 46, title: "Presença Global da AWS", correct: "Implantação rápida de aplicações perto dos usuários finais em todo o mundo", dist: ["Garantia de que dados nunca sairão do país de origem do usuário", "Isenção total de impostos e taxas em transações internacionais", "Obrigação de configurar data centers em todos os continentes"], comm: "A infraestrutura global da AWS permite implantar aplicações em múltiplas regiões rapidamente, reduzindo a latência global." },
+      { id: 47, title: "Classes de Armazenamento do Amazon S3", correct: "S3 Standard, S3 Intelligent-Tiering, S3 Standard-IA e Amazon Glacier", dist: ["S3 Gold, S3 Silver, S3 Bronze e S3 Platinum", "S3 Fast, S3 Medium, S3 Slow e S3 Freeze", "S3 Public, S3 Private, S3 Restricted e S3 Secret"], comm: "As classes do S3 atendem a diferentes necessidades de acesso, desde dados frequentes (Standard) até arquivamento frio (Glacier)." },
+      { id: 48, title: "Modelo de Cobrança do DynamoDB", correct: "Não cobra valor adicional avulso por MB armazenado em solicitações de leitura/gravação", dist: ["Exige pagamento antecipado de 3 anos obrigatoriamente", "Cobra apenas quando o banco de dados fica inativo", "É totalmente gratuito sem qualquer limite de uso"], comm: "O DynamoDB cobra por unidades de capacidade de leitura/gravação (RCU/WCU) ou no modo sob demanda por solicitação." },
+      { id: 49, title: "Auto Scaling Group + Elastic Load Balancer", correct: "Garantir escalabilidade automática e distribuição de tráfego entre instâncias", dist: ["Bloquear automaticamente o acesso de IPs internacionais", "Criptografar arquivos armazenados em buckets do S3", "Substituir a necessidade de bancos de dados relacionais"], comm: "O ELB distribui o tráfego de entrada enquanto o Auto Scaling ajusta a quantidade de instâncias para lidar com a variação de carga." },
+      { id: 50, title: "Amazon Kendra", correct: "Serviço de busca inteligente empresarial com tecnologia de Machine Learning", dist: ["Orquestrador de tarefas em lote de alto desempenho", "Gerenciador de chaves de criptografia KMS", "Servidor de e-mail corporativo gerenciado"], comm: "O Kendra usa aprendizado de máquina para fornecer buscas altamente precisas em documentos e repositórios da empresa." },
+      { id: 51, title: "Amazon Macie", correct: "Descobrimento e proteção automatizados de dados sensíveis (PII) no Amazon S3", dist: ["Conversão de formatos de áudio para MP3", "Execução de testes de estresse em servidores EC2", "Gerenciamento de domínios no Route 53"], comm: "O Macie usa aprendizado de máquina e correspondência de padrões para descobrir e proteger dados de identificação pessoal no S3." },
+      { id: 52, title: "AWS Savings Plans", correct: "Modelo de preço com desconto substancial em troca de compromisso de uso $/hora por 1 ou 3 anos", dist: ["Plano de parcelamento de compras de hardware AWS", "Desconto aplicado apenas para estudantes universitários", "Programa de milhas conversíveis em serviços de nuvem"], comm: "Savings Plans oferecem preços baixos no uso de EC2, Fargate e Lambda em troca do compromisso de um consumo constante em $/hora." },
+      { id: 53, title: "AWS Site-to-Site VPN", correct: "Conexão segura e criptografada entre a rede do escritório local e a VPC AWS", dist: ["Navegação anônima na internet para funcionários", "Aumento da velocidade da conexão de banda larga local", "Acesso público sem senha para clientes na loja"], comm: "A AWS Site-to-Site VPN conecta de forma segura sua rede local ou data center à sua Nuvem Privada Virtual (VPC) da AWS." },
+      { id: 54, title: "Responsabilidade da AWS no Modelo Compartilhado", correct: "Segurança DA nuvem (infraestrutura global, hardware, data centers e hipervisores)", dist: ["Segurança NA nuvem (configurar firewall da aplicação e dados)", "Criptografia de dados armazenados dentro de instâncias EC2", "Gerenciamento de senhas dos usuários finais do cliente"], comm: "A AWS é responsável por proteger a infraestrutura que executa todos os serviços oferecidos na Nuvem AWS." },
+      { id: 55, title: "IAM Roles (Funções do IAM)", correct: "Conceder permissões temporárias e seguras entre serviços AWS sem armazenar chaves de acesso fixas", dist: ["Criar perfis de redes sociais dentro da AWS", "Bloquear requisições de endereços IP maliciosos", "Aumentar a memória RAM de instâncias virtuais"], comm: "As IAM Roles fornecem credenciais temporárias para recursos AWS (como EC2) acessarem outros serviços com segurança." },
+      { id: 56, title: "Amazon Virtual Private Cloud (VPC)", correct: "Rede virtual isolada logicamente para provisionamento de recursos AWS", dist: ["Serviço de armazenamento de objetos públicos", "Banco de dados relacional distribuído", "Motor de renderização de vídeo em nuvem"], comm: "A VPC permite lançar recursos da AWS em uma rede virtual definida por você, com controle total sobre o ambiente de rede." },
+      { id: 57, title: "Design para Resiliência (Multi-AZ)", correct: "Projetar sistemas para suportar falhas distribuindo componentes em múltiplas Zonas de Disponibilidade", dist: ["Concentrar todos os servidores em um único data center para economizar energia", "Desligar backups para aumentar a velocidade de leitura", "Evitar o uso de redes virtuais privadas"], comm: "Implantar recursos em múltiplas AZs garante que se uma zona falhar, os componentes nas outras continuarão operando." },
+      { id: 58, title: "Criptografia de Dados do Cliente", correct: "Responsabilidade do cliente em definir e gerenciar a criptografia de seus dados (usando ferramentas como KMS)", dist: ["Responsabilidade exclusiva da AWS, o cliente não pode intervir", "Proibido em regulamentações globais de privacidade", "Disponível apenas no plano de suporte Enterprise"], comm: "No Modelo de Responsabilidade Compartilhada, o cliente é responsável por configurar a criptografia dos seus próprios dados." },
+      { id: 59, title: "Amazon Aurora", correct: "Banco de dados relacional de alto desempenho com 6 cópias dos dados em 3 AZs e 99.99% de disponibilidade", dist: ["Banco de dados NoSQL chave-valor sem suporte a SQL", "Serviço de armazenamento de arquivos estáticos", "Servidor de cache temporário na memória RAM"], comm: "O Aurora é um banco relacional compatível com MySQL e PostgreSQL que oferece altíssima velocidade e alta disponibilidade." },
+      { id: 60, title: "Amazon Textract", correct: "Extração automática de texto, formulários e tabelas de documentos digitalizados (OCR)", dist: ["Geração de legendas de áudio para arquivos MP3", "Detecção de rostos e emoções em vídeos", "Tradução de código de programação Java para C#"], comm: "O Textract vai além do OCR simples para extrair dados de formulários e tabelas com precisão a partir de documentos digitalizados." },
+      { id: 61, title: "Amazon Transcribe - Custom Vocabulary", correct: "Melhorar a precisão no reconhecimento de termos específicos da empresa, siglas e nomes próprios", dist: ["Mudar a voz sintética de feminina para masculina", "Traduzir o áudio para mais de 100 idiomas simultaneamente", "Aumentar o volume do áudio gravado em 50%"], comm: "O Vocabulário Personalizado no Transcribe ajuda a reconhecer palavras e jargões específicos de determinado domínio ou setor." },
+      { id: 62, title: "Amazon Lex", correct: "Criação de interfaces de conversação (chatbots) com voz e texto usando NLU", dist: ["Monitoramento de desempenho de redes físicas", "Serviço de catálogo de licenças de software", "Servidor de banco de dados NoSQL para arquivos gigantes"], comm: "O Amazon Lex fornece a tecnologia de compreensão de linguagem natural (NLU) para criar chatbots conversacionais avançados." },
+      { id: 63, title: "Amazon Bedrock", correct: "Construção de aplicações de IA Generativa usando Modelos de Fundação (FMs)", dist: ["Serviço de migração física de data centers em caminhões", "Gerenciamento de chaves privadas de criptografia física", "Roteamento de nomes de domínios públicos DNS"], comm: "O Amazon Bedrock é a forma mais fácil de construir e escalar aplicações de IA generativa com modelos de fundação." },
+      { id: 64, title: "Amazon Rekognition", correct: "Análise de visão computacional para identificar objetos, pessoas, textos e cenas em imagens e vídeos", dist: ["Conversão de arquivos PDF para Word", "Reconhecimento de chamadas telefônicas SPAM", "Compactação de arquivos ZIP sem perda de dados"], comm: "O Rekognition oferece análise de imagem e vídeo baseada em aprendizado de máquina para automação e segurança." },
+      { id: 65, title: "Amazon SageMaker", correct: "Plataforma completa para construir, treinar e implantar modelos de Machine Learning", dist: ["Servidor de e-mails em massa para campanhas de marketing", "Gerenciamento de conexões de redes virtuais VPC", "Sistema de backup em fitas magnéticas"], comm: "O SageMaker é um serviço totalmente gerenciado que fornece a desenvolvedores a capacidade de criar e treinar modelos de ML." },
+      { id: 66, title: "AWS X-Ray", correct: "Mapeamento, depuração e rastreamento de requisições em arquiteturas de microsserviços", dist: ["Digitalização de documentos físicos por raio X", "Detecção de invasões em servidores físicos", "Backup automático de tabelas do DynamoDB"], comm: "O AWS X-Ray ajuda desenvolvedores a analisar e depurar aplicações distribuídas e em microsserviços." },
+      { id: 67, title: "AWS Marketplace", correct: "Catálogo digital com milhares de softwares de terceiros prontos para implantação na AWS", dist: ["Loja de compras de hardware e peças de reposição", "Feira de contratação de profissionais certificados AWS", "Plataforma de leilão de instâncias EC2 usadas"], comm: "O AWS Marketplace simplifica a descoberta, compra e implantação de softwares de terceiros executados na AWS." },
+      { id: 68, title: "AWS Compute Optimizer", correct: "Recomendações automáticas de dimensionamento ideal de recursos com base em histórico de uso e ML", dist: ["Aumento automático da banda de internet do usuário final", "Encerramento imediato de contas inativas", "Limpeza física dos servidores nos data centers"], comm: "O Compute Optimizer usa Machine Learning para analisar o histórico de métricas e recomendar tamanhos ideais para EC2 e Lambda." },
+      { id: 69, title: "Amazon Comprehend", correct: "Serviço de Processamento de Linguagem Natural (PNL) para análise de sentimento e extração de insights em textos", dist: ["Compressão de dados para reduzir espaço de armazenamento", "Análise de tráfego de rede física", "Compilação de código Java para binário"], comm: "O Comprehend usa ML para extrair insights, sentimentos e entidades a partir do texto não estruturado." },
+      { id: 70, title: "RDS Multi-Region (Réplicas de Leitura Cross-Region)", correct: "Estratégia de Recuperação de Desastres (DR) e redução de latência para usuários em outros continentes", dist: ["Redução imediata do custo da fatura em 90%", "Eliminação da necessidade de credenciais IAM", "Conversão automática do banco de dados relacional em NoSQL"], comm: "Réplicas cross-region permitem ter uma cópia do banco em outra região geográfica para disaster recovery e leituras locais." },
+      { id: 71, title: "AWS Wavelength", correct: "Infraestrutura AWS implantada dentro das redes 5G de operadoras de telecomunicações para ultrabaixa latência", dist: ["Medição da velocidade de redes Wi-Fi domésticas", "Serviço de transmissão de rádio via satélite", "Cabo submarino de fibra óptica proprietário"], comm: "O Wavelength traz serviços de computação e armazenamento da AWS para a borda das redes 5G das operadoras de celular." },
+      { id: 72, title: "AWS Free Tier (Nível Gratuito)", correct: "Oferta de serviços com opções 12 meses grátis, sempre grátis e testes de curto prazo", dist: ["Acesso ilimitado a todos os serviços da AWS para sempre", "Gratuito apenas durante os primeiros 7 dias de cada mês", "Disponível apenas para grandes empresas corporativas"], comm: "O AWS Free Tier oferece três tipos de ofertas gratuitas dependendo do produto utilizado." },
+      { id: 73, title: "Amazon Neptune", correct: "Banco de dados em grafo gerenciado para conectar dados altamente interconectados", dist: ["Sistema de arquivos de rede compartilhado para Linux", "Motor de busca de logs em tempo real", "Armazenamento frio de retenção de longo prazo"], comm: "O Neptune é um serviço de banco de dados em grafo rápido e confiável para aplicações com dados altamente interligados." },
+      { id: 74, title: "Endereço IP Elástico (Elastic IP)", correct: "Endereço IP público IPv4 estático projetado para computação dinâmica na nuvem", dist: ["IP que muda automaticamente a cada 5 minutos", "IP gratuito ilimitado mesmo quando desconectado de instâncias", "Endereço exclusivo para conexões via Bluetooth"], comm: "Um IP Elástico é um IP público estático atribuído à sua conta, que pode ser rapidamente reassociado a outra instância em caso de falha." },
+      { id: 75, title: "Réplicas de Leitura do Amazon RDS (Read Replicas)", correct: "Escalar horizontalmente o volume de consultas de leitura de um banco relacional", dist: ["Garantir failover automático em caso de desastre principal", "Permitir gravações simultâneas em múltiplos servidores", "Criptografar automaticamente o banco de dados sem backup"], comm: "Read Replicas ajudam a aliviar a carga no banco principal ao redirecionar o tráfego de leitura de relatórios e consultas." },
+      { id: 76, title: "AWS Step Functions", correct: "Orquestração visual de fluxos de trabalho e microsserviços em aplicações distribuídas", dist: ["Contador de passos para aplicativos de saúde", "Aumento da velocidade de compilação de código", "Gerenciador de licenças de software corporativo"], comm: "O Step Functions permite coordenar múltiplos serviços AWS em fluxos de trabalho visuais e automatizados." },
+      { id: 77, title: "AWS Certificate Manager (ACM)", correct: "Emissão, gerenciamento e renovação automática de certificados SSL/TLS públicos e privados", dist: ["Emissão de certificados de conclusão de cursos AWS", "Gerenciamento de cartões de acesso físico aos data centers", "Registro de patentes de software na nuvem"], comm: "O ACM simplifica a criação, gerenciamento e implantação de certificados SSL/TLS para uso com serviços AWS." },
+      { id: 78, title: "AWS Storage Gateway", correct: "Ponte de armazenamento híbrido ligando a infraestrutura local ao armazenamento em nuvem AWS", dist: ["Roteador Wi-Fi corporativo de alta velocidade", "Gateway de pagamento para cartões de crédito", "Dispositivo de leitura de código de barras para estoques"], comm: "O Storage Gateway conecta aplicações locais com armazenamento em nuvem AWS de forma transparente." },
+      { id: 79, title: "Amazon Athena", correct: "Serviço de consultas SQL interativas e serverless diretamente nos dados armazenados no S3", dist: ["Servidor de jogos multiplayer em tempo real", "Banco de dados NoSQL de altíssima velocidade", "Ferramenta de criação de interfaces web"], comm: "O Athena permite analisar dados no Amazon S3 diretamente usando sintaxe SQL padrão sem necessidade de carregar os dados." },
+      { id: 80, title: "Amazon EventBridge", correct: "Barramento de eventos serverless que facilita a conexão de aplicações usando dados de várias fontes", dist: ["Gerenciador de agenda e calendário de reuniões", "Servidor DNS para registro de domínios públicos", "Ferramenta de edição de vídeo em nuvem"], comm: "O EventBridge é um barramento de eventos serverless que envia dados em tempo real entre suas aplicações e serviços AWS." },
+      { id: 81, title: "AWS Account Root User", correct: "Usuário principal criado na abertura da conta com acesso irrestrito a todos os recursos e faturamento", dist: ["Usuário padrão recomendado para tarefas do dia a dia de desenvolvimento", "Conta de suporte técnico exclusiva para funcionários da AWS", "Robô automatizado de limpeza de logs antigos"], comm: "O Root User possui controle total sobre a conta e deve ter seu uso restrito e protegido obrigatoriamente por MFA." },
+      { id: 82, title: "Amazon Inspector", correct: "Varredura automatizada e contínua de vulnerabilidades de segurança e exposição não pretendida", dist: ["Inspecção física dos data centers da AWS por fiscais", "Auditoria de faturas e pagamentos com cartão", "Serviço de busca de arquivos duplicados no S3"], comm: "O Inspector analisa automaticamente cargas de trabalho para identificar vulnerabilidades de software e exposição acidental de rede." },
+      { id: 83, title: "AWS Pricing Calculator", correct: "Ferramenta de estimativa prévia para modelar e calcular custos de arquiteturas na AWS", dist: ["Auditoria fiscal para declaração de imposto de renda", "Calculadora de conversão de moedas internacionais em tempo real", "Algoritmo de negociação de ações na bolsa de valores"], comm: "A Calculadora de Preços da AWS permite criar estimativas detalhadas de custo antes de construir sua infraestrutura." },
+      { id: 84, title: "Amazon Polly", correct: "Serviço que converte texto em fala humana natural (Text-to-Speech)", dist: ["Tradução de idiomas em tempo real por voz", "Reconhecimento de padrões em imagens de satélite", "Servidor de chamadas telefônicas VoIP"], comm: "O Polly transforma texto em fala falada quase humana usando inteligência artificial e aprendizado profundo." },
+      { id: 85, title: "AWS Snowball / Snowmobile", correct: "Dispositivos e caminhões físicos para migração de petabytes e exabytes de dados para a AWS", dist: ["Sistemas de refrigeração para servidores EC2 locais", "Serviços de destruição física de discos rígidos antigos", "Protetores de surto elétrico para redes físicas"], comm: "A família AWS Snow transporta grandes volumes de dados fisicamente para a nuvem quando a migração via rede não é viável." },
+      { id: 86, title: "Calculadora de TCO", correct: "Comparação direta de custos entre manter um Data Center local versus migrar para a AWS", dist: ["Calculadora de impostos corporativos internacionais", "Estimador de tempo de download de arquivos grandes", "Simulador de despesas de viagem para conferências AWS"], comm: "A ferramenta de TCO auxilia executivos a avaliar a viabilidade econômica e economia ao migrar cargas de trabalho para a AWS." }
+    ];
+
+    const STORAGE_KEY = 'aws_simulado_app_v1';
+    
+    let state = {
+      answers: {}, // { qId: selectedOptionIndex }
+      bookmarks: [], // [ qId1, qId2 ]
+      currentView: 'view-home',
+      quizMode: 'study', // 'study' or 'exam'
+      currentQuestionIndex: 0,
+      examTimeRemaining: 86 * 60, // 86 minutes in seconds
+      examTimerInterval: null,
+      examSubmitted: false
+    };
+
+    // Load saved data from localStorage
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          state.answers = parsed.answers || {};
+          state.bookmarks = parsed.bookmarks || [];
+        }
+      } catch (e) {
+        console.error("Erro ao carregar dados locais", e);
+      }
+    }
+
+    // Save state to localStorage
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          answers: state.answers,
+          bookmarks: state.bookmarks
+        }));
+      } catch (e) {
+        console.error("Erro ao salvar progresso", e);
+      }
+      updateDashboardStats();
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      const targetView = document.getElementById(viewId);
+      if (targetView) targetView.classList.add('active');
+
+      state.currentView = viewId;
+
+      // Update active navigation button
+      if (viewId === 'view-home') document.getElementById('nav-home').classList.add('active');
+      if (viewId === 'view-quiz' && state.quizMode === 'study') document.getElementById('nav-study').classList.add('active');
+      if (viewId === 'view-quiz' && state.quizMode === 'exam') document.getElementById('nav-exam').classList.add('active');
+      if (viewId === 'view-bookmarks') {
+        document.getElementById('nav-bookmarks').classList.add('active');
+        renderBookmarksView();
+      }
+
+      window.scrollTo(0, 0);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function triggerHaptic(type = 'light') {
+      if ('vibrate' in navigator) {
+        if (type === 'light') navigator.vibrate(20);
+        if (type === 'success') navigator.vibrate([30, 50, 30]);
+        if (type === 'error') navigator.vibrate([80, 50, 80]);
+      }
+    }
+
+    // Helper to generate deterministic options for each question
+    function getQuestionOptions(q) {
+      // Deterministic shuffle based on Question ID so choices don't jump on reload
+      const allOptions = [
+        { text: q.correct, isCorrect: true },
+        { text: q.dist[0], isCorrect: false },
+        { text: q.dist[1], isCorrect: false },
+        { text: q.dist[2], isCorrect: false }
+      ];
+
+      // Simple pseudorandom shuffle based on q.id
+      const seed = q.id;
+      for (let i = allOptions.length - 1; i > 0; i--) {
+        const j = (seed * (i + 1) * 7) % (i + 1);
+        [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+      }
+      return allOptions;
+    }
+
+    function renderCurrentQuestion() {
+      const q = QUESTIONS[state.currentQuestionIndex];
+      const total = QUESTIONS.length;
+
+      document.getElementById('quiz-q-num').textContent = `Questão ${q.id} de ${total}`;
+      document.getElementById('quiz-q-text').textContent = `${q.id}. ${q.title} — Qual é a principal característica ou definição deste serviço/conceito?`;
+
+      // Progress Fill
+      const pct = Math.round(((state.currentQuestionIndex + 1) / total) * 100);
+      document.getElementById('quiz-progress-fill').style.width = `${pct}%`;
+
+      // Bookmark state
+      const isBookmarked = state.bookmarks.includes(q.id);
+      const bmBtn = document.getElementById('quiz-bookmark-btn');
+      bmBtn.classList.toggle('active', isBookmarked);
+
+      // Options
+      const options = getQuestionOptions(q);
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+
+      const prefixes = ['A', 'B', 'C', 'D'];
+      const savedAnswer = state.answers[q.id];
+
+      options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        
+        btn.innerHTML = `<span class="option-prefix">${prefixes[idx]})</span> <span>${opt.text}</span>`;
+
+        // Check state in Study vs Exam
+        if (savedAnswer !== undefined) {
+          if (state.quizMode === 'study') {
+            btn.classList.add('disabled');
+            if (idx === savedAnswer) {
+              btn.classList.add(opt.isCorrect ? 'correct' : 'incorrect');
+            } else if (opt.isCorrect) {
+              btn.classList.add('correct');
+            }
+          } else {
+            // Exam Mode
+            if (idx === savedAnswer) {
+              btn.classList.add('selected');
+            }
+          }
+        }
+
+        btn.onclick = () => handleSelectOption(idx, opt.isCorrect);
+        container.appendChild(btn);
+      });
+
+      // Explanation Box
+      const expBox = document.getElementById('quiz-explanation');
+      if (state.quizMode === 'study' && savedAnswer !== undefined) {
+        document.getElementById('quiz-explanation-text').textContent = q.comm;
+        expBox.classList.add('visible');
+      } else {
+        expBox.classList.remove('visible');
+      }
+
+      // Prev/Next buttons
+      document.getElementById('btn-prev').disabled = state.currentQuestionIndex === 0;
+      if (state.currentQuestionIndex === total - 1) {
+        document.getElementById('btn-next').textContent = state.quizMode === 'exam' ? 'Finalizar ✓' : 'Concluir ✓';
+      } else {
+        document.getElementById('btn-next').textContent = 'Próxima →';
+      }
+    }
+
+    function handleSelectOption(optionIdx, isCorrect) {
+      const q = QUESTIONS[state.currentQuestionIndex];
+      
+      // If in study mode and already answered, ignore
+      if (state.quizMode === 'study' && state.answers[q.id] !== undefined) return;
+
+      state.answers[q.id] = optionIdx;
+      saveState();
+
+      if (state.quizMode === 'study') {
+        triggerHaptic(isCorrect ? 'success' : 'error');
+      } else {
+        triggerHaptic('light');
+      }
+
+      renderCurrentQuestion();
+    }
+
+    function prevQuestion() {
+      if (state.currentQuestionIndex > 0) {
+        triggerHaptic('light');
+        state.currentQuestionIndex--;
+        renderCurrentQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      triggerHaptic('light');
+      if (state.currentQuestionIndex < QUESTIONS.length - 1) {
+        state.currentQuestionIndex++;
+        renderCurrentQuestion();
+      } else {
+        if (state.quizMode === 'exam') {
+          finishExam();
+        } else {
+          showToast('Você revisou todas as questões!');
+          switchView('view-home');
+        }
+      }
+    }
+
+    function startStudyMode(startIndex = 0) {
+      state.quizMode = 'study';
+      state.currentQuestionIndex = startIndex;
+      document.getElementById('quiz-timer').style.display = 'none';
+      if (state.examTimerInterval) clearInterval(state.examTimerInterval);
+      switchView('view-quiz');
+      renderCurrentQuestion();
+    }
+
+    function startExamMode() {
+      state.quizMode = 'exam';
+      state.currentQuestionIndex = 0;
+      state.examTimeRemaining = 86 * 60; // 86 min
+      
+      const timerEl = document.getElementById('quiz-timer');
+      timerEl.style.display = 'inline-block';
+      
+      if (state.examTimerInterval) clearInterval(state.examTimerInterval);
+      
+      state.examTimerInterval = setInterval(() => {
+        state.examTimeRemaining--;
+        if (state.examTimeRemaining <= 0) {
+          clearInterval(state.examTimerInterval);
+          finishExam();
+        } else {
+          const m = Math.floor(state.examTimeRemaining / 60).toString().padStart(2, '0');
+          const s = (state.examTimeRemaining % 60).toString().padStart(2, '0');
+          timerEl.textContent = `${m}:${s}`;
+        }
+      }, 1000);
+
+      switchView('view-quiz');
+      renderCurrentQuestion();
+    }
+
+    function finishExam() {
+      if (state.examTimerInterval) clearInterval(state.examTimerInterval);
+      
+      let correctCount = 0;
+      QUESTIONS.forEach(q => {
+        const userAns = state.answers[q.id];
+        if (userAns !== undefined) {
+          const options = getQuestionOptions(q);
+          if (options[userAns] && options[userAns].isCorrect) {
+            correctCount++;
+          }
+        }
+      });
+
+      const total = QUESTIONS.length;
+      const pct = Math.round((correctCount / total) * 100);
+
+      document.getElementById('res-score').textContent = `${pct}%`;
+      document.getElementById('res-correct').textContent = correctCount;
+      document.getElementById('res-wrong').textContent = total - correctCount;
+
+      if (pct >= 75) {
+        document.getElementById('res-msg').textContent = '🎉 Parabéns! Você seria APROVADO na certificação AWS!';
+      } else {
+        document.getElementById('res-msg').textContent = '📚 Continue estudando! É necessário ~75% de acertos para aprovação.';
+      }
+
+      switchView('view-results');
+    }
+
+    function toggleBookmarkCurrent() {
+      const q = QUESTIONS[state.currentQuestionIndex];
+      const idx = state.bookmarks.indexOf(q.id);
+      
+      if (idx > -1) {
+        state.bookmarks.splice(idx, 1);
+        showToast('Removido dos Favoritos');
+      } else {
+        state.bookmarks.push(q.id);
+        showToast('Salvo nos Favoritos ⭐');
+      }
+
+      triggerHaptic('light');
+      saveState();
+      renderCurrentQuestion();
+    }
+
+    function renderBookmarksView() {
+      const list = document.getElementById('bookmarks-list');
+      list.innerHTML = '';
+
+      if (state.bookmarks.length === 0) {
+        list.innerHTML = `<div class="card" style="text-align:center; padding:30px;"><p>Nenhuma questão favorita salva ainda. Toque na estrela ★ durante as questões para salvar.</p></div>`;
+        return;
+      }
+
+      state.bookmarks.forEach(qId => {
+        const q = QUESTIONS.find(item => item.id === qId);
+        if (!q) return;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.cursor = 'pointer';
+        card.innerHTML = `
+          <div style="display:flex; justify-size:space-between; align-items:center;">
+            <span class="question-number">Questão ${q.id}</span>
+            <span style="color:var(--primary-aws);">★</span>
+          </div>
+          <div style="font-weight:600; color:var(--text-main); margin-top:6px;">${q.title}</div>
+          <p style="margin-top:4px; font-size:0.85rem;">${q.correct}</p>
+        `;
+        card.onclick = () => startStudyMode(q.id - 1);
+        list.appendChild(card);
+      });
+    }
+
+    function updateDashboardStats() {
+      const answeredKeys = Object.keys(state.answers);
+      const totalAnswered = answeredKeys.length;
+      const total = QUESTIONS.length;
+
+      let correct = 0;
+      answeredKeys.forEach(qId => {
+        const q = QUESTIONS.find(i => i.id == qId);
+        if (q) {
+          const userAns = state.answers[qId];
+          const opts = getQuestionOptions(q);
+          if (opts[userAns] && opts[userAns].isCorrect) correct++;
+        }
+      });
+
+      const accuracy = totalAnswered > 0 ? Math.round((correct / totalAnswered) * 100) : 0;
+      const progressPct = Math.round((totalAnswered / total) * 100);
+
+      document.getElementById('stat-completed').textContent = `${totalAnswered}/${total}`;
+      document.getElementById('stat-accuracy').textContent = `${accuracy}%`;
+      document.getElementById('stat-progress-pct').textContent = `${progressPct}%`;
+      document.getElementById('stat-progress-fill').style.width = `${progressPct}%`;
+    }
+
+    function resetProgress() {
+      if (confirm('Deseja realmente apagar todo o seu histórico e respostas salvas?')) {
+        state.answers = {};
+        state.bookmarks = [];
+        saveState();
+        showToast('Progresso zerado!');
+        switchView('view-home');
+      }
+    }
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+      if (state.currentView !== 'view-quiz') return;
+      const threshold = 60;
+      if (touchEndX < touchStartX - threshold) {
+        // Swipe left -> Next
+        nextQuestion();
+      }
+      if (touchEndX > touchStartX + threshold) {
+        // Swipe right -> Prev
+        prevQuestion();
+      }
+    }
+
+    function initServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        // Inline Service Worker Script content
+        const swCode = `
+          const CACHE_NAME = 'aws-quiz-pwa-v1';
+          
+          self.addEventListener('install', (event) => {
+            self.skipWaiting();
+          });
+
+          self.addEventListener('activate', (event) => {
+            event.waitUntil(clients.claim());
+          });
+
+          self.addEventListener('fetch', (event) => {
+            // Respond from Cache or Fallback to Network
+            event.respondWith(
+              caches.match(event.request).then((cachedResponse) => {
+                if (cachedResponse) {
+                  return cachedResponse;
+                }
+                return fetch(event.request).then((networkResponse) => {
+                  if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+                    const responseToCache = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                      cache.put(event.request, responseToCache);
+                    });
+                  }
+                  return networkResponse;
+                }).catch(() => {
+                  // If completely offline and request fails, return cached root
+                  return caches.match('./');
+                });
+              })
+            );
+          });
+        `;
+
+        const blob = new Blob([swCode], { type: 'text/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+
+        navigator.serviceWorker.register(swUrl)
+          .then(() => console.log('Service Worker Registrado via Blob com Sucesso!'))
+          .catch(err => console.log('Erro ao registrar SW Blob:', err));
+      }
+
+      // Online / Offline Status Badge
+      function updateOnlineStatus() {
+        const badge = document.getElementById('offline-badge');
+        const text = document.getElementById('offline-text');
+        
+        if (navigator.onLine) {
+          badge.classList.remove('offline');
+          text.textContent = 'Pronto Offline';
+        } else {
+          badge.classList.add('offline');
+          text.textContent = 'Modo Offline Active';
+        }
+      }
+
+      window.addEventListener('online', updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+      updateOnlineStatus();
+    }
+
+    // PWA Install Prompt Handler
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const banner = document.getElementById('pwa-banner');
+      if (banner) banner.classList.add('show');
+    });
+
+    document.getElementById('pwa-install-btn').onclick = () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('PWA Instalado');
+          }
+          deferredPrompt = null;
+          document.getElementById('pwa-banner').classList.remove('show');
+        });
+      }
+    };
+
+    window.onload = function () {
+      loadState();
+      updateDashboardStats();
+      initServiceWorker();
+    };
+  </script>
+</body>
+</html>
