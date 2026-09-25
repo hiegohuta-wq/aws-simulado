@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulado AWS Certified Cloud Practitioner</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -17,13 +18,13 @@
         .aws-bg-orange { background-color: #ff9900; }
         .aws-text-orange { color: #ff9900; }
         .aws-border-orange { border-color: #ff9900; }
-        .aws-btn {
-            transition: all 0.2s ease-in-out;
-        }
+        
+        .aws-btn { transition: all 0.2s ease-in-out; }
         .aws-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+        
         .option-card.selected {
             border-color: #ff9900;
             background-color: #fffaf0;
@@ -36,6 +37,7 @@
             border-color: #ef4444;
             background-color: #fef2f2;
         }
+        
         /* Custom scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -115,14 +117,14 @@
                                 <input type="radio" name="mode" value="teste" class="peer sr-only" checked>
                                 <div class="p-4 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">
                                     <div class="font-bold text-gray-800">Modo Teste</div>
-                                    <div class="text-xs text-gray-500 mt-1">Feedback imediato após cada resposta. Ideal para estudo.</div>
+                                    <div class="text-xs text-gray-500 mt-1">Feedback de acerto/erro após confirmar cada resposta.</div>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="mode" value="exame" class="peer sr-only">
                                 <div class="p-4 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">
                                     <div class="font-bold text-gray-800">Modo Exame</div>
-                                    <div class="text-xs text-gray-500 mt-1">Feedback apenas no final. Simula as condições reais da prova.</div>
+                                    <div class="text-xs text-gray-500 mt-1">Sem interrupções. Resultado e feedback apenas no final.</div>
                                 </div>
                             </label>
                         </div>
@@ -139,17 +141,16 @@
                 <h2 class="text-xl font-bold aws-text-dark mb-4 border-b pb-2">Seu Histórico</h2>
                 <div id="history-container" class="flex-grow overflow-y-auto space-y-3 pr-2">
                     <!-- History items will be injected here -->
-                    <p class="text-sm text-gray-500 text-center mt-10">Nenhum simulado iniciado ainda.</p>
                 </div>
             </div>
         </div>
 
         <!-- QUIZ SCREEN -->
-        <div id="screen-quiz" class="hidden w-full max-w-4xl w-full bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
+        <div id="screen-quiz" class="hidden w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
             <!-- Progress Header -->
             <div class="flex justify-between items-center mb-4 text-sm font-medium text-gray-500">
                 <span id="quiz-progress-text">Questão 1 de 25</span>
-                <span id="quiz-mode-badge" class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-xs">Modo Teste</span>
+                <span id="quiz-mode-badge" class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-xs font-bold">Modo Teste</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
                 <div id="quiz-progress-bar" class="aws-bg-orange h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -158,7 +159,7 @@
             <!-- Question Area -->
             <div class="mb-8">
                 <h3 id="question-text" class="text-xl sm:text-2xl font-semibold text-gray-800 leading-snug mb-2"></h3>
-                <p id="question-instruction" class="text-sm text-gray-500 italic mb-4"></p>
+                <p id="question-instruction" class="text-sm text-gray-500 italic mb-4 font-medium"></p>
                 
                 <div id="options-container" class="space-y-3 mt-6">
                     <!-- Options injected here -->
@@ -166,29 +167,35 @@
             </div>
 
             <!-- Feedback Area (Test Mode) -->
-            <div id="feedback-container" class="hidden mb-6 p-4 rounded-lg border">
+            <div id="feedback-container" class="hidden mb-6 p-5 rounded-lg border shadow-sm">
                 <div id="feedback-title" class="font-bold text-lg mb-2"></div>
                 <div id="feedback-text" class="text-gray-700 text-sm leading-relaxed"></div>
             </div>
 
             <!-- Controls -->
-            <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-                <button id="btn-prev" class="px-5 py-2 rounded-lg font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition">
+            <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+                <button id="btn-prev" class="px-5 py-2 rounded-lg font-medium text-gray-600 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition">
                     Anterior
                 </button>
-                <button id="btn-next" class="px-5 py-2 rounded-lg font-medium text-white aws-bg-dark hover:bg-gray-800 transition shadow">
-                    Próxima
-                </button>
-                <button id="btn-finish" class="hidden px-5 py-2 rounded-lg font-medium text-white aws-bg-orange hover:bg-orange-600 transition shadow">
-                    Finalizar Simulado
-                </button>
+                
+                <div class="flex gap-3">
+                    <button id="btn-confirm" class="hidden px-6 py-2 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow disabled:opacity-50 disabled:cursor-not-allowed">
+                        Confirmar Resposta
+                    </button>
+                    <button id="btn-next" class="px-6 py-2 rounded-lg font-medium text-white aws-bg-dark hover:bg-gray-800 transition shadow">
+                        Próxima Questão
+                    </button>
+                    <button id="btn-finish" class="hidden px-6 py-2 rounded-lg font-bold text-white aws-bg-orange hover:bg-orange-600 transition shadow">
+                        Finalizar Simulado
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- RESULTS SCREEN -->
         <div id="screen-results" class="hidden w-full max-w-5xl bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold aws-text-dark mb-2">Resultado do Simulado</h2>
+                <h2 class="text-3xl font-bold aws-text-dark mb-2">Resultado Final</h2>
                 <div class="inline-block mt-4">
                     <div class="relative w-32 h-32 flex items-center justify-center rounded-full border-8 border-gray-100 mx-auto">
                         <svg id="score-ring" class="absolute top-0 left-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
@@ -208,9 +215,8 @@
                     <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                     Revisão de Questões Incorretas
                 </h3>
-                <p class="text-sm text-gray-500 mb-4">Abaixo estão as questões que você errou, com as explicações detalhadas para reforçar o conceito.</p>
                 
-                <div id="review-container" class="space-y-6">
+                <div id="review-container" class="space-y-6 mt-4">
                     <!-- Incorrect questions injected here -->
                 </div>
             </div>
@@ -225,12 +231,10 @@
     </main>
 
     <script>
-        // --- DATABASE OF QUESTIONS ---
-        // Extraídas dos arquivos PDF e DOCX fornecidos
+        // --- BANCO DE QUESTÕES ---
         const allQuestions = [
             {
-                id: 1,
-                level: "intermediario",
+                id: 1, level: "intermediario",
                 text: "Em cenários de migração para a AWS, como as empresas podem aplicar o AWS Application Discovery Service para auxiliá-las?",
                 options: [
                     "Para automatizar a migração de instâncias EC2 diretamente do on-premises.",
@@ -242,9 +246,8 @@
                 explanation: "O AWS Application Discovery Service ajuda a coletar dados de utilização e dependência de ambientes on-premises para planejar a migração com precisão."
             },
             {
-                id: 2,
-                level: "intermediario",
-                text: "Qual serviço da AWS simplifica o processo de conformidade ao garantir que apenas softwares licenciados (como licenças do Microsoft SQL Server) estejam presentes na rede?",
+                id: 2, level: "intermediario",
+                text: "Qual serviço da AWS simplifica o processo de conformidade ao garantir que apenas softwares licenciados estejam presentes na rede?",
                 options: [
                     "AWS Config",
                     "AWS Inspector",
@@ -255,9 +258,8 @@
                 explanation: "O License Manager facilita o gerenciamento, rastreamento e validação de licenças de software em conformidade com as regras dos fabricantes."
             },
             {
-                id: 3,
-                level: "intermediario",
-                text: "Qual é o banco de dados sem servidor (serverless) da AWS que oferece escalabilidade automática, suporte a esquemas flexíveis e é ideal para cargas de trabalho de baixa latência, como jogos e IoT?",
+                id: 3, level: "intermediario",
+                text: "Qual é o banco de dados sem servidor (serverless) da AWS que oferece escalabilidade automática, suporte a esquemas flexíveis e é ideal para cargas de trabalho de baixa latência?",
                 options: [
                     "Amazon RDS",
                     "Amazon Aurora",
@@ -268,8 +270,7 @@
                 explanation: "O DynamoDB é um banco de dados NoSQL chave-valor totalmente gerenciado que escala infinitamente com alta performance, sendo serverless."
             },
             {
-                id: 4,
-                level: "dificil",
+                id: 4, level: "dificil",
                 text: "Quais opções representam recursos fundamentais do AWS Cloud Adoption Framework (AWS CAF) para a perspectiva de segurança? (Selecione 3)",
                 options: [
                     "Monitoramento de atividades e auditoria de logs de segurança.",
@@ -282,9 +283,8 @@
                 explanation: "A perspectiva de segurança do CAF foca em garantir a integridade, confidencialidade e disponibilidade dos dados e sistemas através de IAM, criptografia e auditoria."
             },
             {
-                id: 5,
-                level: "intermediario",
-                text: "Qual serviço da AWS é recomendado para realizar uma grande quantidade de processos em lote (batch) com escalabilidade automática, sem necessidade de provisionamento antecipado de infraestrutura?",
+                id: 5, level: "intermediario",
+                text: "Qual serviço da AWS é recomendado para realizar uma grande quantidade de processos em lote (batch) com escalabilidade automática, sem provisionamento antecipado?",
                 options: [
                     "AWS Lambda",
                     "AWS Batch",
@@ -295,60 +295,7 @@
                 explanation: "O AWS Batch gerencia de forma dinâmica os recursos computacionais necessários para rodar milhares de tarefas em lote de maneira eficiente."
             },
             {
-                id: 6,
-                level: "facil",
-                text: "Qual serviço da AWS é recomendado para armazenar documentos que passam por alterações frequentes e demandam um eficiente gerenciamento de versões?",
-                options: [
-                    "Amazon EBS",
-                    "Amazon EFS",
-                    "Amazon S3",
-                    "Amazon Glacier"
-                ],
-                correctAnswers: [2],
-                explanation: "O Amazon S3 oferece versionamento de objetos, garantindo alta durabilidade e controle sobre o histórico de arquivos alterados."
-            },
-            {
-                id: 7,
-                level: "facil",
-                text: "Qual é o método de pagamento padrão amplamente utilizado na maioria dos serviços da AWS, baseado no consumo real?",
-                options: [
-                    "Pagamento fixo mensal (Fixed rate).",
-                    "Pagamento antecipado obrigatório.",
-                    "Pagamento conforme o uso (Pay-as-you-go).",
-                    "Licenciamento perpétuo."
-                ],
-                correctAnswers: [2],
-                explanation: "No modelo Pay-as-you-go você paga apenas pelos recursos que efetivamente consome, sem custos iniciais obrigatórios."
-            },
-            {
-                id: 8,
-                level: "dificil",
-                text: "Qual é a principal função do AWS Control Tower em uma grande organização?",
-                options: [
-                    "Hospedar aplicações web globais de alta performance.",
-                    "Fornecer recursos de gerenciamento centralizado e governança para múltiplas contas na AWS.",
-                    "Automatizar testes de unidade no processo de CI/CD.",
-                    "Proteger aplicativos contra ataques DDoS automatizados."
-                ],
-                correctAnswers: [1],
-                explanation: "O Control Tower automatiza a configuração de novas contas (Landing Zone) seguindo políticas de segurança e melhores práticas corporativas."
-            },
-            {
-                id: 9,
-                level: "intermediario",
-                text: "Quais configurações devem ser implementadas no Amazon RDS para garantir alta disponibilidade, resiliência e performance para uma aplicação crítica?",
-                options: [
-                    "Read Replicas exclusivas.",
-                    "Multi-AZ (distribuir os bancos de dados em mais de uma zona de disponibilidade na mesma região).",
-                    "Cross-Region Snapshot Copy.",
-                    "Amazon RDS Proxy."
-                ],
-                correctAnswers: [1],
-                explanation: "A opção Multi-AZ mantém uma cópia síncrona do banco em outra zona para failover automático em caso de falha, garantindo alta disponibilidade."
-            },
-            {
-                id: 10,
-                level: "facil",
+                id: 10, level: "facil",
                 text: "Quais são as principais características e funcionalidades do AWS Identity and Access Management (IAM)? (Selecione 3)",
                 options: [
                     "Suporta integração com provedores externos para autenticação federada.",
@@ -358,24 +305,10 @@
                     "Permite a criação de políticas detalhadas de controle de acesso."
                 ],
                 correctAnswers: [0, 2, 4],
-                explanation: "O IAM é o serviço central para gerenciar identidades, permitindo federação, MFA e políticas de permissões granulares, não gerenciando redes ou backups."
+                explanation: "O IAM é o serviço central para gerenciar identidades, permitindo federação, MFA e políticas de permissões granulares."
             },
             {
-                id: 11,
-                level: "facil",
-                text: "Qual recurso do IAM você escolheria para gerenciar de forma eficiente os acessos de 100 funcionários divididos entre desenvolvedores, DBAs e arquitetos?",
-                options: [
-                    "IAM Users",
-                    "IAM Roles",
-                    "IAM Groups",
-                    "IAM Policies diretas"
-                ],
-                correctAnswers: [2],
-                explanation: "Os Grupos (IAM Groups) permitem atribuir políticas de permissão coletivamente a conjuntos de usuários com funções semelhantes, facilitando a gestão."
-            },
-            {
-                id: 12,
-                level: "intermediario",
+                id: 12, level: "intermediario",
                 text: "Qual serviço de rede de entrega de conteúdo (CDN) reduz a latência global na distribuição de vídeos, imagens e arquivos estáticos/dinâmicos?",
                 options: [
                     "AWS Global Accelerator",
@@ -387,199 +320,38 @@
                 explanation: "O CloudFront utiliza uma rede global de pontos de presença (Edge Locations) para fazer cache de conteúdo próximo aos usuários finais."
             },
             {
-                id: 13,
-                level: "intermediario",
-                text: "Qual serviço da AWS permite a execução de contêineres de forma serverless, abstraindo totalmente o gerenciamento de infraestrutura?",
-                options: [
-                    "Amazon ECS",
-                    "Amazon EKS",
-                    "AWS Fargate",
-                    "AWS Elastic Beanstalk"
-                ],
-                correctAnswers: [2],
-                explanation: "O Fargate elimina a necessidade de gerenciar servidores (instâncias EC2) ou clusters ao rodar tarefas no Amazon ECS ou EKS, operando 100% serverless."
-            },
-            {
-                id: 14,
-                level: "intermediario",
-                text: "Qual é a diferença entre o AWS Web Application Firewall (WAF) e o AWS Firewall Manager?",
-                options: [
-                    "O WAF bloqueia ataques DDoS na camada 4, enquanto o Firewall Manager bloqueia na camada 7.",
-                    "O WAF bloqueia ataques de aplicativos web, enquanto o Firewall Manager gerencia regras de firewall centralmente em várias contas.",
-                    "O Firewall Manager atua dentro do sistema operacional, enquanto o WAF atua na borda.",
-                    "Não há diferença, são o mesmo serviço com nomes comerciais diferentes."
-                ],
-                correctAnswers: [1],
-                explanation: "O WAF protege o aplicativo web. O Firewall Manager simplifica a aplicação e o gerenciamento dessas regras de segurança (WAF, Shield, Security Groups) em escala corporativa multi-conta."
-            },
-            {
-                id: 15,
-                level: "facil",
-                text: "Por que é necessário associar um Elastic Block Store (EBS) a uma instância EC2?",
-                options: [
-                    "Para habilitar acesso à internet.",
-                    "Para armazenar backups em fita magnética.",
-                    "Para fornecer armazenamento persistente e escalável de bloco para a instância.",
-                    "Para atuar como banco de dados relacional nativo."
-                ],
-                correctAnswers: [2],
-                explanation: "Os volumes EBS funcionam como discos rígidos virtuais (armazenamento em bloco) independentes do ciclo de vida da máquina virtual, mantendo os dados persistentes."
-            },
-            {
-                id: 16,
-                level: "facil",
-                text: "Qual modelo de utilização da nuvem em que o foco é o desenvolvimento de aplicações sem preocupação com a infraestrutura de servidores e sistemas operacionais subjacentes?",
-                options: [
-                    "IaaS (Infrastructure as a Service)",
-                    "PaaS (Platform as a Service)",
-                    "SaaS (Software as a Service)",
-                    "DaaS (Desktop as a Service)"
-                ],
-                correctAnswers: [1],
-                explanation: "A plataforma como serviço (PaaS) gerencia sistemas operacionais e hardware, deixando o desenvolvedor focado apenas no código e nos dados."
-            },
-            {
-                id: 17,
-                level: "facil",
-                text: "Quais são os 6 pilares do Well-Architected Framework?",
+                id: 17, level: "facil",
+                text: "Quais são os 6 pilares do Well-Architected Framework da AWS?",
                 options: [
                     "Excelência Operacional, Segurança, Confiabilidade, Desempenho Eficiente, Escalabilidade, Disciplina.",
                     "Excelência Operacional, Segurança, Confiabilidade, Desempenho Eficiente, Otimização de Custos, Sustentabilidade.",
                     "Desenvolvimento, Operações, Segurança, Confiabilidade, Elasticidade, Sustentabilidade."
                 ],
                 correctAnswers: [1],
-                explanation: "Os 6 pilares são: Excelência operacional, Segurança, Confiabilidade, Eficiência de performance (desempenho), Otimização de custos e Sustentabilidade."
-            },
-            {
-                id: 18,
-                level: "dificil",
-                text: "Qual serviço fornece um servidor privado virtual (VPS) simples e de baixo custo ideal para hospedar um site dinâmico em WordPress?",
-                options: [
-                    "Amazon EC2",
-                    "AWS Elastic Beanstalk",
-                    "Amazon Lightsail",
-                    "AWS Amplify"
-                ],
-                correctAnswers: [2],
-                explanation: "O Lightsail empacota VPS, SSD, transferência e DNS em planos mensais simples, previsíveis e acessíveis, focado na facilidade de uso."
-            },
-            {
-                id: 19,
-                level: "intermediario",
-                text: "Qual serviço monitora o ambiente, coleta métricas de CPU, memória e logs detalhados, auxiliando na solução de problemas em produção e acionando alarmes?",
-                options: [
-                    "AWS CloudTrail",
-                    "Amazon CloudWatch",
-                    "AWS Config",
-                    "AWS Inspector"
-                ],
-                correctAnswers: [1],
-                explanation: "O CloudWatch coleta dados de desempenho e logs de aplicações em tempo real, permitindo disparar alarmes e métricas personalizadas."
-            },
-            {
-                id: 20,
-                level: "facil",
-                text: "O que compreende o AWS Free Tier (Nível Gratuito)?",
-                options: [
-                    "Apenas um mês de uso ilimitado de qualquer serviço.",
-                    "Categorias de 12 meses de gratuidade, serviços sempre gratuitos e testes de curto prazo (trials).",
-                    "Gratuidade eterna para bancos de dados Oracle no RDS.",
-                    "Um modelo onde você paga metade do preço no primeiro ano."
-                ],
-                correctAnswers: [1],
-                explanation: "O Free Tier permite experimentar diversos serviços sem custos, dividido nas categorias: 12 meses (ex: EC2 t2.micro), Sempre Gratuito (ex: DynamoDB 25GB) e Trials."
-            },
-            {
-                id: 21,
-                level: "dificil",
-                text: "Qual plano de suporte oferece um Gerente Técnico de Conta (TAM) dedicado para monitorar proativamente e sugerir melhorias operacionais?",
-                options: [
-                    "Developer",
-                    "Business",
-                    "Enterprise (e Enterprise On-Ramp)",
-                    "Basic"
-                ],
-                correctAnswers: [2],
-                explanation: "O plano Enterprise é o nível mais alto, sendo o único que disponibiliza um gerente humano exclusivo (TAM) para orientar a empresa de forma proativa."
-            },
-            {
-                id: 22,
-                level: "intermediario",
-                text: "Uma equipe notou que 30% das consultas em sua aplicação devolvem sempre os mesmos resultados do banco. Qual serviço deve ser implantado para evitar acessos repetidos no banco central?",
-                options: [
-                    "Amazon CloudFront",
-                    "Amazon ElastiCache",
-                    "AWS Storage Gateway",
-                    "Amazon S3 Glacier"
-                ],
-                correctAnswers: [1],
-                explanation: "O ElastiCache (Redis ou Memcached) atua como cache em memória, guardando resultados repetitivos, acelerando a leitura e retirando a carga do banco relacional."
-            },
-            {
-                id: 23,
-                level: "facil",
-                text: "Qual é a principal função prática de um Security Group?",
-                options: [
-                    "Atuar como firewall de rede global.",
-                    "Bloquear acessos maliciosos usando Inteligência Artificial (WAF).",
-                    "Atuar como uma espécie de firewall para controlar a autorização do tráfego (entrada e saída) em nível de instância EC2.",
-                    "Criptografar os dados em trânsito dentro da VPC."
-                ],
-                correctAnswers: [2],
-                explanation: "Os Security Groups operam diretamente na interface de rede da instância (nível de máquina), controlando quais portas/IPs podem entrar (Inbound) ou sair (Outbound)."
-            },
-            {
-                id: 24,
-                level: "intermediario",
-                text: "Qual serviço da AWS faz a gestão de banco de dados no modelo de Data Warehouse para Business Intelligence, analisando dados escaláveis na casa dos petabytes?",
-                options: [
-                    "Amazon Aurora",
-                    "Amazon DynamoDB",
-                    "Amazon Redshift",
-                    "Amazon EMR"
-                ],
-                correctAnswers: [2],
-                explanation: "O Redshift é o Data Warehouse da AWS, focado em análises complexas, relatórios pesados e BI de maneira super-rápida utilizando armazenamento colunar."
-            },
-            {
-                id: 25,
-                level: "facil",
-                text: "Ao calcular e estimar custos de transferência de dados (largura de banda de rede) na arquitetura da AWS, qual fluxo sempre é isento de custos?",
-                options: [
-                    "Transferência de dados entre regiões diferentes.",
-                    "Transferência de dados advindos da internet para dentro da AWS (Inbound).",
-                    "Transferência de dados da AWS para a internet (Outbound).",
-                    "Transferência de dados via AWS Direct Connect."
-                ],
-                correctAnswers: [1],
-                explanation: "Como regra geral de custos na AWS, todo tráfego entrando (Inbound) na infraestrutura vindo da internet é gratuito. A cobrança ocorre no tráfego de saída (Outbound)."
+                explanation: "Os 6 pilares são: Excelência operacional, Segurança, Confiabilidade, Eficiência de performance, Otimização de custos e Sustentabilidade."
             }
         ];
 
-        // --- APPLICATION STATE ---
+        // --- ESTADO DA APLICAÇÃO ---
         let state = {
             history: [],
             currentSession: null
         };
 
-        // --- CORE LOGIC & INITIALIZATION ---
+        // --- STREAMING_CHUNK:Lógica de Inicialização ---
         function initApp() {
-            // Load state from localStorage
             const savedState = localStorage.getItem('awsSimulatorState');
             if (savedState) {
-                try {
-                    state = JSON.parse(savedState);
-                } catch (e) {
-                    console.error("Erro ao carregar histórico", e);
-                }
+                try { state = JSON.parse(savedState); } 
+                catch (e) { console.error("Erro ao carregar histórico", e); }
             }
 
-            // Event Listeners
             document.getElementById('setup-form').addEventListener('submit', startNewQuiz);
             document.getElementById('btn-home').addEventListener('click', goHome);
             document.getElementById('btn-next').addEventListener('click', handleNext);
             document.getElementById('btn-prev').addEventListener('click', handlePrev);
             document.getElementById('btn-finish').addEventListener('click', finishQuiz);
+            document.getElementById('btn-confirm').addEventListener('click', handleConfirm);
 
             renderStartScreen();
         }
@@ -588,7 +360,7 @@
             localStorage.setItem('awsSimulatorState', JSON.stringify(state));
         }
 
-        // --- START SCREEN ---
+        // --- STREAMING_CHUNK:Lógica da Tela Inicial ---
         function renderStartScreen() {
             document.getElementById('screen-start').classList.remove('hidden');
             document.getElementById('screen-quiz').classList.add('hidden');
@@ -601,7 +373,6 @@
             if (state.history.length === 0) {
                 historyContainer.innerHTML = '<p class="text-sm text-gray-500 text-center mt-10">Nenhum simulado no histórico.</p>';
             } else {
-                // Reverse to show newest first
                 [...state.history].reverse().forEach((session, index) => {
                     const actualIndex = state.history.length - 1 - index;
                     const date = new Date(session.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -627,6 +398,7 @@
             }
         }
 
+        // --- STREAMING_CHUNK:Lógica de Criação do Quiz ---
         function startNewQuiz(e) {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -634,25 +406,15 @@
             const count = parseInt(formData.get('count'));
             const mode = formData.get('mode');
 
-            // Filter questions (In a real scenario with 500+ qs. Here we use the database provided)
-            // If requested count is > available, we duplicate/mix to simulate a large bank, or just take available.
-            let availableQs = allQuestions; 
-            
-            // Note: Since our extracted DB has 25 questions, if they ask for 45/65 we will just reuse/shuffle them to demonstrate the functionality.
-            // Ideally, filtering by level:
-            let pool = availableQs;
-            if (level !== 'intermediario' && level !== 'dificil') {
-                // just mix them all to guarantee enough volume for the demo
-            }
-
-            // Shuffle and pick
+            let pool = allQuestions; 
             let selectedQuestions = [];
             let iterations = 0;
+            
+            // Simula banco maior duplicando/embaralhando caso count > disponíveis
             while(selectedQuestions.length < count && iterations < 5) {
                 let shuffled = [...pool].sort(() => 0.5 - Math.random());
                 for(let q of shuffled) {
                     if (selectedQuestions.length < count) {
-                        // Deep copy to prevent state mutation across tests
                         selectedQuestions.push(JSON.parse(JSON.stringify(q)));
                     }
                 }
@@ -664,21 +426,23 @@
                 date: new Date().toISOString(),
                 level: level,
                 mode: mode,
-                total: count,
+                total: selectedQuestions.length,
                 questions: selectedQuestions,
                 currentIndex: 0,
-                userAnswers: {}, // questionId_index -> array of selected options
+                userAnswers: {}, 
+                confirmedAnswers: {}, // NOVA PROPRIEDADE: Controla se a questão já foi avaliada
                 status: 'in-progress'
             };
 
             state.history.push(state.currentSession);
             saveState();
-            
             loadQuizScreen();
         }
 
         function continueQuiz(historyIndex) {
             state.currentSession = state.history[historyIndex];
+            // Garante compatibilidade caso o histórico não tenha a propriedade
+            if(!state.currentSession.confirmedAnswers) state.currentSession.confirmedAnswers = {};
             loadQuizScreen();
         }
 
@@ -687,7 +451,7 @@
             renderStartScreen();
         }
 
-        // --- QUIZ SCREEN ---
+        // --- STREAMING_CHUNK:Lógica de Renderização do Quiz ---
         function loadQuizScreen() {
             document.getElementById('screen-start').classList.add('hidden');
             document.getElementById('screen-results').classList.add('hidden');
@@ -701,25 +465,24 @@
             const session = state.currentSession;
             const q = session.questions[session.currentIndex];
             const isMulti = q.correctAnswers.length > 1;
+            const qKey = `${session.currentIndex}`;
 
-            // Update UI Headers
             document.getElementById('quiz-progress-text').innerText = `Questão ${session.currentIndex + 1} de ${session.total}`;
             document.getElementById('quiz-progress-bar').style.width = `${((session.currentIndex + 1) / session.total) * 100}%`;
             document.getElementById('quiz-mode-badge').innerText = session.mode === 'teste' ? 'Modo Teste' : 'Modo Exame';
             
-            // Question Text
             document.getElementById('question-text').innerText = q.text;
-            document.getElementById('question-instruction').innerText = isMulti ? `(Selecione ${q.correctAnswers.length} opções corretas)` : "(Selecione 1 opção correta)";
+            document.getElementById('question-instruction').innerText = isMulti ? `(Selecione exatamente ${q.correctAnswers.length} opções corretas)` : "(Selecione 1 opção correta)";
 
-            // Options
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             
-            // Retrieve past answers for this specific prompt
-            const qKey = `${session.currentIndex}`;
             const selectedSet = new Set(session.userAnswers[qKey] || []);
             const isAnswered = selectedSet.size > 0;
-            const showTestFeedback = session.mode === 'teste' && isAnswered;
+            
+            // NOVA LÓGICA: Só mostra feedback no Modo Teste SE a resposta já foi confirmada
+            const isConfirmed = session.mode === 'exame' ? false : !!session.confirmedAnswers[qKey];
+            const showTestFeedback = session.mode === 'teste' && isConfirmed;
 
             q.options.forEach((opt, index) => {
                 const el = document.createElement('div');
@@ -733,13 +496,16 @@
                 if (showTestFeedback) {
                     if (isCorrect) extraClasses = 'correct';
                     else if (isSelected && !isCorrect) extraClasses = 'wrong';
-                    else extraClasses = 'border-gray-200 opacity-60'; // dim unselected
+                    else extraClasses = 'border-gray-200 opacity-50'; // escurece as não selecionadas e não corretas
                 }
 
-                el.className = `option-card border-2 rounded-lg p-4 cursor-pointer transition flex gap-3 items-start ${extraClasses}`;
+                // Se já confirmou, desabilita cliques
+                const pointerEvent = isConfirmed ? 'pointer-events-none opacity-90' : 'cursor-pointer';
                 
-                if (!showTestFeedback) {
-                    el.onclick = () => handleOptionSelect(index, isMulti);
+                el.className = `option-card border-2 rounded-lg p-4 transition flex gap-3 items-start ${extraClasses} ${pointerEvent}`;
+                
+                if (!isConfirmed) {
+                    el.onclick = () => handleOptionSelect(index, isMulti, q.correctAnswers.length);
                 }
 
                 const inputType = isMulti ? 'checkbox' : 'radio';
@@ -754,82 +520,123 @@
                 container.appendChild(el);
             });
 
-            // Feedback Area
+            // Lógica do Quadro de Feedback
             const fbContainer = document.getElementById('feedback-container');
             if (showTestFeedback) {
                 fbContainer.classList.remove('hidden');
                 
-                // Check if user answer is fully correct
                 const isFullyCorrect = selectedSet.size === q.correctAnswers.length && 
                                       [...selectedSet].every(val => q.correctAnswers.includes(val));
                 
                 if (isFullyCorrect) {
-                    fbContainer.className = 'mb-6 p-4 rounded-lg border border-green-200 bg-green-50';
-                    document.getElementById('feedback-title').innerHTML = '✅ Resposta Correta';
+                    fbContainer.className = 'mb-6 p-5 rounded-lg border border-green-200 bg-green-50';
+                    document.getElementById('feedback-title').innerHTML = '✅ Correto!';
                     document.getElementById('feedback-title').className = 'font-bold text-lg mb-2 text-green-700';
                 } else {
-                    fbContainer.className = 'mb-6 p-4 rounded-lg border border-red-200 bg-red-50';
-                    document.getElementById('feedback-title').innerHTML = '❌ Resposta Incorreta';
+                    fbContainer.className = 'mb-6 p-5 rounded-lg border border-red-200 bg-red-50';
+                    document.getElementById('feedback-title').innerHTML = '❌ Incorreto';
                     document.getElementById('feedback-title').className = 'font-bold text-lg mb-2 text-red-700';
                 }
-                document.getElementById('feedback-text').innerText = q.explanation;
+                
+                // Formata quais eram as respostas corretas
+                const correctTexts = q.correctAnswers.map(idx => `• ${q.options[idx]}`).join('<br>');
+                
+                document.getElementById('feedback-text').innerHTML = `
+                    <div class="mb-3 text-gray-800">
+                        <strong class="block mb-1">A(s) resposta(s) correta(s):</strong>
+                        ${correctTexts}
+                    </div>
+                    <div class="pt-3 border-t border-gray-200/60">
+                        <strong class="block mb-1 text-gray-800">Explicação:</strong>
+                        ${q.explanation}
+                    </div>
+                `;
             } else {
                 fbContainer.classList.add('hidden');
             }
 
-            // Buttons
+            updateControls(isAnswered, isConfirmed, isMulti, selectedSet.size, q.correctAnswers.length);
+        }
+
+        // --- STREAMING_CHUNK:Lógica de Interação e Controles ---
+        function updateControls(isAnswered, isConfirmed, isMulti, selectedCount, requiredCount) {
+            const session = state.currentSession;
+            
             document.getElementById('btn-prev').disabled = session.currentIndex === 0;
             
             const btnNext = document.getElementById('btn-next');
             const btnFinish = document.getElementById('btn-finish');
+            const btnConfirm = document.getElementById('btn-confirm');
             
-            if (session.currentIndex === session.total - 1) {
-                btnNext.classList.add('hidden');
-                btnFinish.classList.remove('hidden');
-            } else {
-                btnNext.classList.remove('hidden');
-                btnFinish.classList.add('hidden');
-                // In Test mode, hide next if not answered
-                if (session.mode === 'teste') {
-                    btnNext.disabled = !isAnswered;
-                    if(isAnswered) btnNext.classList.add('animate-pulse'); // call to action
-                    else btnNext.classList.remove('animate-pulse');
+            const isLast = session.currentIndex === session.total - 1;
+
+            if (session.mode === 'teste') {
+                if (isConfirmed) {
+                    // Já validou a resposta, esconde confirmar, mostra próximo
+                    btnConfirm.classList.add('hidden');
+                    
+                    if (isLast) {
+                        btnNext.classList.add('hidden');
+                        btnFinish.classList.remove('hidden');
+                    } else {
+                        btnNext.classList.remove('hidden');
+                        btnFinish.classList.add('hidden');
+                    }
                 } else {
-                    btnNext.disabled = false;
+                    // Ainda não validou a resposta
+                    btnConfirm.classList.remove('hidden');
+                    btnNext.classList.add('hidden');
+                    btnFinish.classList.add('hidden');
+                    
+                    // Só habilita o confirmar se selecionou exatamente o número exigido de opções
+                    const hasRequiredAnswers = isMulti ? selectedCount === requiredCount : isAnswered;
+                    btnConfirm.disabled = !hasRequiredAnswers;
+                }
+            } else {
+                // Modo Exame (sem botão confirmar intermediário)
+                btnConfirm.classList.add('hidden');
+                
+                if (isLast) {
+                    btnNext.classList.add('hidden');
+                    btnFinish.classList.remove('hidden');
+                } else {
+                    btnNext.classList.remove('hidden');
+                    btnFinish.classList.add('hidden');
                 }
             }
         }
 
-        function handleOptionSelect(optIndex, isMulti) {
+        function handleOptionSelect(optIndex, isMulti, maxAllowed) {
             const session = state.currentSession;
-            const q = session.questions[session.currentIndex];
             const qKey = `${session.currentIndex}`;
-            
             let currentSelections = session.userAnswers[qKey] || [];
             
             if (isMulti) {
                 if (currentSelections.includes(optIndex)) {
+                    // Desmarcar
                     currentSelections = currentSelections.filter(i => i !== optIndex);
                 } else {
-                    if (currentSelections.length < q.correctAnswers.length) {
+                    // Marcar (só permite marcar até o limite estabelecido na questão)
+                    if (currentSelections.length < maxAllowed) {
                         currentSelections.push(optIndex);
                     }
                 }
             } else {
+                // Radio button substitui a seleção
                 currentSelections = [optIndex];
             }
             
             session.userAnswers[qKey] = currentSelections;
-            
-            // If in Test mode and user selected the required amount of answers, auto-evaluate
-            if (session.mode === 'teste' && currentSelections.length === q.correctAnswers.length) {
-                 // Save state on action
-                 saveState();
-                 renderCurrentQuestion(); 
-            } else {
-                 saveState();
-                 renderCurrentQuestion();
-            }
+            saveState();
+            renderCurrentQuestion();
+        }
+
+        function handleConfirm() {
+            const session = state.currentSession;
+            const qKey = `${session.currentIndex}`;
+            session.confirmedAnswers[qKey] = true;
+            saveState();
+            renderCurrentQuestion();
         }
 
         function handleNext() {
@@ -848,6 +655,7 @@
             }
         }
 
+        // --- STREAMING_CHUNK:Lógica de Finalização e Resultados ---
         function finishQuiz() {
             const session = state.currentSession;
             let score = 0;
@@ -855,15 +663,12 @@
 
             session.questions.forEach((q, index) => {
                 const ans = session.userAnswers[`${index}`] || [];
+                // Para estar correta, tem que ter marcado a mesma quantidade e as mesmas alternativas
                 const isCorrect = ans.length === q.correctAnswers.length && ans.every(v => q.correctAnswers.includes(v));
                 if (isCorrect) {
                     score++;
                 } else {
-                    incorrectQs.push({
-                        q: q,
-                        userAns: ans,
-                        index: index + 1
-                    });
+                    incorrectQs.push({ q: q, userAns: ans, index: index + 1 });
                 }
             });
 
@@ -872,12 +677,10 @@
             session.incorrectLog = incorrectQs;
             saveState();
 
-            // Find index in history to view results
             const historyIndex = state.history.findIndex(s => s.id === session.id);
             viewResults(historyIndex);
         }
 
-        // --- RESULTS SCREEN ---
         function viewResults(historyIndex) {
             const session = state.history[historyIndex];
             
@@ -889,15 +692,11 @@
             const percent = Math.round(session.score * 100);
             document.getElementById('score-percent').innerText = `${percent}%`;
             
-            // Circle animation
             const circle = document.getElementById('score-circle-progress');
-            const circumference = 2 * Math.PI * 46; // r=46
+            const circumference = 2 * Math.PI * 46; 
             const offset = circumference - (percent / 100) * circumference;
-            setTimeout(() => {
-                circle.style.strokeDashoffset = offset;
-            }, 100);
+            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
             
-            // Pass/Fail AWS threshold is typically 70%
             const isPass = percent >= 70;
             circle.classList.remove('aws-text-orange', 'text-green-500', 'text-red-500');
             circle.classList.add(isPass ? 'text-green-500' : 'text-red-500');
@@ -907,22 +706,19 @@
                 scoreText.innerHTML = `🎉 Parabéns! Você foi <strong>Aprovado</strong>.`;
                 scoreText.className = "mt-4 text-lg font-medium text-green-600";
             } else {
-                scoreText.innerHTML = `⚠️ Não foi dessa vez. Pontuação mínima: 70%.`;
+                scoreText.innerHTML = `⚠️ Não foi dessa vez. Pontuação mínima exigida: 70%.`;
                 scoreText.className = "mt-4 text-lg font-medium text-red-600";
             }
 
-            // Review Incorrect
             const reviewContainer = document.getElementById('review-container');
             reviewContainer.innerHTML = '';
 
             if (session.incorrectLog && session.incorrectLog.length > 0) {
                 session.incorrectLog.forEach(log => {
                     const q = log.q;
-                    
                     const el = document.createElement('div');
                     el.className = "bg-gray-50 border border-gray-200 rounded-lg p-5";
                     
-                    // Generate options text
                     let optionsHTML = '';
                     q.options.forEach((opt, i) => {
                         const isUserSel = log.userAns.includes(i);
@@ -931,10 +727,10 @@
                         let badge = '';
                         let textClass = 'text-gray-600';
                         if (isCorrect) {
-                            badge = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded ml-2 font-bold">CORRETA</span>';
+                            badge = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded ml-2 font-bold uppercase">Correta</span>';
                             textClass = 'text-green-800 font-medium';
                         } else if (isUserSel && !isCorrect) {
-                            badge = '<span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded ml-2 font-bold">SEU ERRO</span>';
+                            badge = '<span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded ml-2 font-bold uppercase">Seu Erro</span>';
                             textClass = 'text-red-800 line-through opacity-80';
                         }
                         
@@ -962,7 +758,6 @@
             }
         }
 
-        // Initialize on load
         window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
