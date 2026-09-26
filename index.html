@@ -1,764 +1,1116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulado AWS Certified Cloud Practitioner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simulado AWS - praticando e aprendendo (CLF-C02)</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        aws: {
+                            navy: '#232f3e',
+                            dark: '#121d2d',
+                            orange: '#ff9900',
+                            orangeHover: '#ec7211',
+                            blue: '#0073bb',
+                            light: '#f2f3f3',
+                            gray: '#eaeded',
+                            card: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f2f3f3; /* AWS Light Gray */
-            color: #16191f; /* AWS Dark text */
-        }
-        .aws-bg-dark { background-color: #232f3e; }
-        .aws-text-dark { color: #232f3e; }
-        .aws-bg-orange { background-color: #ff9900; }
-        .aws-text-orange { color: #ff9900; }
-        .aws-border-orange { border-color: #ff9900; }
-        
-        .aws-btn { transition: all 0.2s ease-in-out; }
-        .aws-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #f2f3f3;
+            color: #16191f;
+            -webkit-tap-highlight-color: transparent;
         }
         
-        .option-card.selected {
-            border-color: #ff9900;
-            background-color: #fffaf0;
-        }
-        .option-card.correct {
-            border-color: #10b981;
-            background-color: #ecfdf5;
-        }
-        .option-card.wrong {
-            border-color: #ef4444;
-            background-color: #fef2f2;
+        .aws-card {
+            background: #ffffff;
+            border: 1px solid #eaeded;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
         
         /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c4c4c4;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Responsive transitions */
+        .drawer-overlay {
+            background-color: rgba(18, 29, 45, 0.6);
+            backdrop-filter: blur(2px);
+        }
+
+        /* Option selection pulse */
+        .option-btn {
+            transition: all 0.15s ease-in-out;
+        }
+        .option-btn:active {
+            transform: scale(0.99);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between selection:bg-aws-orange selection:text-white">
 
-    <!-- Header -->
-    <header class="aws-bg-dark text-white p-4 shadow-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold flex items-center gap-2">
-                <svg class="w-6 h-6 aws-text-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                AWS Cloud Practitioner Simulado
-            </h1>
-            <button id="btn-home" class="hidden text-sm hover:text-orange-400 font-medium px-3 py-1 rounded bg-gray-800 transition">
-                Voltar ao Início
-            </button>
+    <!-- Top Header -->
+    <header class="bg-aws-navy text-white sticky top-0 z-30 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showHomeConfirm()">
+                <div class="bg-aws-orange text-aws-navy p-2 rounded-lg font-bold text-lg flex items-center justify-center w-10 h-10 shadow-inner">
+                    <i class="fa-solid fa-cloud"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base md:text-lg leading-tight tracking-wide">AWS Simulado</h1>
+                    <p class="text-xs text-gray-300 font-medium hidden sm:block">praticando e aprendendo (CLF-C02)</p>
+                </div>
+            </div>
+
+            <!-- Header Info / Stats in Active Mode -->
+            <div id="header-quiz-info" class="hidden flex items-center space-x-3 md:space-x-5">
+                <!-- Timer -->
+                <div id="timer-container" class="hidden items-center bg-aws-dark px-3 py-1.5 rounded-lg border border-gray-700 text-sm font-mono text-amber-400 font-bold">
+                    <i class="fa-regular fa-clock mr-2 animate-pulse"></i>
+                    <span id="timer-display">01:30:00</span>
+                </div>
+
+                <!-- Progress Pill -->
+                <div class="text-xs md:text-sm bg-gray-800/80 px-3 py-1.5 rounded-lg border border-gray-700 text-gray-200">
+                    <span id="header-progress">Questão 1/25</span>
+                </div>
+
+                <!-- Grid Drawer Trigger Button -->
+                <button onclick="app.toggleGridDrawer()" class="bg-aws-orange hover:bg-aws-orangeHover text-aws-navy font-semibold px-3 py-1.5 rounded-lg text-xs md:text-sm flex items-center transition shadow-sm">
+                    <i class="fa-solid fa-table-cells mr-1.5"></i>
+                    <span class="hidden sm:inline">Grade</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow flex flex-col items-center justify-center p-4 sm:p-6 w-full max-w-6xl mx-auto">
-        
-        <!-- START SCREEN -->
-        <div id="screen-start" class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
-            
-            <!-- Setup Card -->
-            <div class="md:col-span-2 bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
-                <h2 class="text-2xl font-bold aws-text-dark mb-6">Novo Simulado</h2>
-                
-                <form id="setup-form" class="space-y-6">
-                    <!-- Nível -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nível de Dificuldade</label>
-                        <div class="grid grid-cols-3 gap-3">
-                            <label class="cursor-pointer">
-                                <input type="radio" name="level" value="facil" class="peer sr-only" checked>
-                                <div class="text-center p-3 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">Fácil</div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="level" value="intermediario" class="peer sr-only">
-                                <div class="text-center p-3 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">Intermediário</div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="level" value="dificil" class="peer sr-only">
-                                <div class="text-center p-3 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">Difícil</div>
-                            </label>
-                        </div>
-                    </div>
+    <!-- Main Content Area -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
 
-                    <!-- Quantidade -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Quantidade de Questões</label>
-                        <div class="grid grid-cols-3 gap-3">
-                            <label class="cursor-pointer">
-                                <input type="radio" name="count" value="25" class="peer sr-only" checked>
-                                <div class="text-center p-3 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">25</div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="count" value="45" class="peer sr-only">
-                                <div class="text-center p-3 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">45</div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="count" value="65" class="peer sr-only">
-                                <div class="text-center p-3 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">65</div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Modo -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Modo de Execução</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <label class="cursor-pointer">
-                                <input type="radio" name="mode" value="teste" class="peer sr-only" checked>
-                                <div class="p-4 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">
-                                    <div class="font-bold text-gray-800">Modo Teste</div>
-                                    <div class="text-xs text-gray-500 mt-1">Feedback de acerto/erro após confirmar cada resposta.</div>
-                                </div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="mode" value="exame" class="peer sr-only">
-                                <div class="p-4 rounded-lg border-2 border-gray-200 peer-checked:aws-border-orange peer-checked:bg-orange-50 hover:bg-gray-50 transition">
-                                    <div class="font-bold text-gray-800">Modo Exame</div>
-                                    <div class="text-xs text-gray-500 mt-1">Sem interrupções. Resultado e feedback apenas no final.</div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full aws-bg-orange text-white font-bold text-lg py-4 rounded-lg shadow aws-btn">
-                        Iniciar Simulado
-                    </button>
-                </form>
-            </div>
-
-            <!-- History Sidebar -->
-            <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200 flex flex-col max-h-[600px]">
-                <h2 class="text-xl font-bold aws-text-dark mb-4 border-b pb-2">Seu Histórico</h2>
-                <div id="history-container" class="flex-grow overflow-y-auto space-y-3 pr-2">
-                    <!-- History items will be injected here -->
+        <!-- ================= VIEW 1: HOME / CONFIGURATION ================= -->
+        <section id="view-home" class="space-y-6">
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-r from-aws-navy to-aws-dark text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block bg-aws-orange text-aws-navy font-bold text-xs uppercase tracking-wider px-2.5 py-1 rounded-full mb-3">AWS Certified Cloud Practitioner</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold mb-2">Simulado AWS - praticando e aprendendo</h2>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        Prepare-se com eficácia para a certificação CLF-C02. Pratique por domínios específicos ou simule o exame oficial com temporizador e feedback detalhado.
+                    </p>
                 </div>
-            </div>
-        </div>
-
-        <!-- QUIZ SCREEN -->
-        <div id="screen-quiz" class="hidden w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
-            <!-- Progress Header -->
-            <div class="flex justify-between items-center mb-4 text-sm font-medium text-gray-500">
-                <span id="quiz-progress-text">Questão 1 de 25</span>
-                <span id="quiz-mode-badge" class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-xs font-bold">Modo Teste</span>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
-                <div id="quiz-progress-bar" class="aws-bg-orange h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <i class="fa-solid fa-award text-9xl absolute -right-6 -bottom-6 opacity-10 text-white pointer-events-none"></i>
             </div>
 
-            <!-- Question Area -->
-            <div class="mb-8">
-                <h3 id="question-text" class="text-xl sm:text-2xl font-semibold text-gray-800 leading-snug mb-2"></h3>
-                <p id="question-instruction" class="text-sm text-gray-500 italic mb-4 font-medium"></p>
-                
-                <div id="options-container" class="space-y-3 mt-6">
-                    <!-- Options injected here -->
-                </div>
-            </div>
-
-            <!-- Feedback Area (Test Mode) -->
-            <div id="feedback-container" class="hidden mb-6 p-5 rounded-lg border shadow-sm">
-                <div id="feedback-title" class="font-bold text-lg mb-2"></div>
-                <div id="feedback-text" class="text-gray-700 text-sm leading-relaxed"></div>
-            </div>
-
-            <!-- Controls -->
-            <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-                <button id="btn-prev" class="px-5 py-2 rounded-lg font-medium text-gray-600 border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition">
-                    Anterior
-                </button>
-                
-                <div class="flex gap-3">
-                    <button id="btn-confirm" class="hidden px-6 py-2 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow disabled:opacity-50 disabled:cursor-not-allowed">
-                        Confirmar Resposta
-                    </button>
-                    <button id="btn-next" class="px-6 py-2 rounded-lg font-medium text-white aws-bg-dark hover:bg-gray-800 transition shadow">
-                        Próxima Questão
-                    </button>
-                    <button id="btn-finish" class="hidden px-6 py-2 rounded-lg font-bold text-white aws-bg-orange hover:bg-orange-600 transition shadow">
-                        Finalizar Simulado
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- RESULTS SCREEN -->
-        <div id="screen-results" class="hidden w-full max-w-5xl bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold aws-text-dark mb-2">Resultado Final</h2>
-                <div class="inline-block mt-4">
-                    <div class="relative w-32 h-32 flex items-center justify-center rounded-full border-8 border-gray-100 mx-auto">
-                        <svg id="score-ring" class="absolute top-0 left-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                            <circle class="text-gray-200 stroke-current" stroke-width="8" cx="50" cy="50" r="46" fill="transparent"></circle>
-                            <circle id="score-circle-progress" class="aws-text-orange stroke-current transition-all duration-1000 ease-out" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="46" fill="transparent" stroke-dasharray="289" stroke-dashoffset="289"></circle>
-                        </svg>
-                        <div class="absolute flex flex-col items-center">
-                            <span id="score-percent" class="text-3xl font-bold text-gray-800">0%</span>
-                        </div>
-                    </div>
-                </div>
-                <p id="score-text" class="mt-4 text-lg font-medium text-gray-600"></p>
-            </div>
-
-            <div class="border-t border-gray-200 pt-6">
-                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    Revisão de Questões Incorretas
+            <!-- Configuration Form -->
+            <div class="aws-card p-6 md:p-8 space-y-6">
+                <h3 class="text-lg font-bold text-aws-navy flex items-center border-b pb-3">
+                    <i class="fa-solid fa-sliders text-aws-orange mr-2.5"></i>
+                    Configurar Sessão de Estudo
                 </h3>
-                
-                <div id="review-container" class="space-y-6 mt-4">
-                    <!-- Incorrect questions injected here -->
+
+                <!-- 1. Selection of Domain -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">1. Selecione o Domínio de Estudo</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="domain-selector">
+                        <label class="domain-card border-2 border-aws-orange bg-amber-50/40 p-4 rounded-xl cursor-pointer flex items-start space-x-3 transition hover:border-aws-orange">
+                            <input type="radio" name="domain" value="0" checked class="mt-1 text-aws-orange focus:ring-aws-orange">
+                            <div>
+                                <span class="font-bold text-aws-navy block text-sm">Todos os Domínios (Simulado Geral)</span>
+                                <span class="text-xs text-gray-500">Questões mistas abrangendo 100% do conteúdo da prova oficial.</span>
+                            </div>
+                        </label>
+                        <label class="domain-card border-2 border-gray-200 p-4 rounded-xl cursor-pointer flex items-start space-x-3 transition hover:border-aws-orange">
+                            <input type="radio" name="domain" value="1" class="mt-1 text-aws-orange focus:ring-aws-orange">
+                            <div>
+                                <span class="font-bold text-aws-navy block text-sm">Domínio 1: Conceitos de Nuvem</span>
+                                <span class="text-xs text-gray-500">24% da prova • Definições, Well-Architected, CAF e Economia de Nuvem.</span>
+                            </div>
+                        </label>
+                        <label class="domain-card border-2 border-gray-200 p-4 rounded-xl cursor-pointer flex items-start space-x-3 transition hover:border-aws-orange">
+                            <input type="radio" name="domain" value="2" class="mt-1 text-aws-orange focus:ring-aws-orange">
+                            <div>
+                                <span class="font-bold text-aws-navy block text-sm">Domínio 2: Segurança e Conformidade</span>
+                                <span class="text-xs text-gray-500">30% da prova • Responsabilidade Compartilhada, IAM, Shield, KMS e WAF.</span>
+                            </div>
+                        </label>
+                        <label class="domain-card border-2 border-gray-200 p-4 rounded-xl cursor-pointer flex items-start space-x-3 transition hover:border-aws-orange">
+                            <input type="radio" name="domain" value="3" class="mt-1 text-aws-orange focus:ring-aws-orange">
+                            <div>
+                                <span class="font-bold text-aws-navy block text-sm">Domínio 3: Tecnologia e Serviços</span>
+                                <span class="text-xs text-gray-500">34% da prova • EC2, S3, RDS, VPC, Lambda, CloudFront e Infraestrutura.</span>
+                            </div>
+                        </label>
+                        <label class="domain-card border-2 border-gray-200 p-4 rounded-xl cursor-pointer flex items-start space-x-3 transition hover:border-aws-orange md:col-span-2">
+                            <input type="radio" name="domain" value="4" class="mt-1 text-aws-orange focus:ring-aws-orange">
+                            <div>
+                                <span class="font-bold text-aws-navy block text-sm">Domínio 4: Cobrança, Finanças e Suporte</span>
+                                <span class="text-xs text-gray-500">12% da prova • Pricing Calculator, Budgets, Organizations e Planos de Suporte.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2. Quantity of Questions -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">2. Quantidade de Questões</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <button type="button" onclick="app.setQuestionCount(25)" id="count-btn-25" class="count-btn border-2 border-aws-orange bg-amber-50 font-bold py-2.5 px-4 rounded-xl text-aws-navy text-sm transition text-center">
+                            25 Questões
+                        </button>
+                        <button type="button" onclick="app.setQuestionCount(45)" id="count-btn-45" class="count-btn border-2 border-gray-200 font-bold py-2.5 px-4 rounded-xl text-aws-navy text-sm transition text-center">
+                            45 Questões
+                        </button>
+                        <button type="button" onclick="app.setQuestionCount(65)" id="count-btn-65" class="count-btn border-2 border-gray-200 font-bold py-2.5 px-4 rounded-xl text-aws-navy text-sm transition text-center">
+                            65 Questões
+                        </button>
+                        <button type="button" onclick="app.setQuestionCount('all')" id="count-btn-all" class="count-btn border-2 border-gray-200 font-bold py-2.5 px-4 rounded-xl text-aws-navy text-sm transition text-center">
+                            Todas do Domínio
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Execution Mode -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">3. Modo de Execução</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="mode-card border-2 border-aws-orange bg-amber-50/40 p-4 rounded-xl cursor-pointer flex items-start space-x-3 transition">
+                            <input type="radio" name="mode" value="practice" checked class="mt-1 text-aws-orange focus:ring-aws-orange">
+                            <div>
+                                <span class="font-bold text-aws-navy text-sm block">Modo Teste (Estudo / Prática)</span>
+                                <span class="text-xs text-gray-600 leading-snug block mt-1">
+                                    • Feedback e gabarito imediato ao selecionar opção.<br>
+                                    • Explicação técnica detalhada da resposta.<br>
+                                    • Sem limite de tempo. Ideal para fixar aprendizado.
+                                </span>
+                            </div>
+                        </label>
+                        <label class="mode-card border-2 border-gray-200 p-4 rounded-xl cursor-pointer flex items-start space-x-3 transition">
+                            <input type="radio" name="mode" value="exam" class="mt-1 text-aws-orange focus:ring-aws-orange">
+                            <div>
+                                <span class="font-bold text-aws-navy text-sm block">Modo Exame (Simulação Real)</span>
+                                <span class="text-xs text-gray-600 leading-snug block mt-1">
+                                    • Cronômetro regressivo de 90 minutos.<br>
+                                    • Sem feedback durante a prova.<br>
+                                    • Resultado e explicações completas apenas ao finalizar.
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Start Action Buttons -->
+                <div class="pt-4 flex flex-col sm:flex-row gap-3">
+                    <button onclick="app.startQuiz()" class="w-full sm:w-2/3 bg-aws-orange hover:bg-aws-orangeHover text-aws-navy font-bold py-3.5 px-6 rounded-xl text-base shadow-md transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Iniciar Simulado Agora</span>
+                    </button>
+                    <button onclick="app.showHistory()" class="w-full sm:w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3.5 px-4 rounded-xl text-sm transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Histórico de Provas</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW 2: QUIZ RUNNER ================= -->
+        <section id="view-quiz" class="hidden space-y-5">
+            <!-- Top Controls Bar -->
+            <div class="aws-card p-4 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center space-x-2">
+                    <span id="quiz-domain-badge" class="bg-blue-100 text-blue-800 font-medium text-xs px-2.5 py-1 rounded-full">
+                        Domínio 1
+                    </span>
+                    <span id="quiz-mode-badge" class="bg-amber-100 text-amber-800 font-medium text-xs px-2.5 py-1 rounded-full">
+                        Modo Teste
+                    </span>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <!-- Flag / Bookmark Button -->
+                    <button id="flag-btn" onclick="app.toggleFlagCurrent()" class="border border-gray-300 hover:bg-gray-50 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                        <i id="flag-icon" class="fa-regular fa-flag text-gray-400"></i>
+                        <span id="flag-text">Sinalizar</span>
+                    </button>
+
+                    <!-- Question Grid Button -->
+                    <button onclick="app.toggleGridDrawer()" class="bg-aws-navy text-white hover:bg-aws-dark px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition">
+                        <i class="fa-solid fa-list-ol"></i>
+                        <span>Ver Questões</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="mt-8 pt-6 border-t flex justify-center">
-                <button onclick="goHome()" class="px-8 py-3 rounded-lg font-bold text-white aws-bg-dark hover:bg-gray-800 transition shadow-lg">
-                    Novo Simulado
+            <!-- Question Card -->
+            <div class="aws-card p-6 md:p-8 space-y-6">
+                <!-- Question Number & Text -->
+                <div>
+                    <div class="text-xs font-bold text-aws-orange uppercase tracking-wider mb-2" id="q-number-title">
+                        Questão 1 de 25
+                    </div>
+                    <h2 id="q-text" class="text-base md:text-lg font-bold text-aws-navy leading-snug">
+                        Carregando enunciado da questão...
+                    </h2>
+                </div>
+
+                <!-- Options List -->
+                <div id="q-options" class="space-y-3">
+                    <!-- Dynamic Options Inserted Here -->
+                </div>
+
+                <!-- Explanation Box (Only visible in Practice Mode after selection or in review) -->
+                <div id="q-explanation" class="hidden p-4 rounded-xl border-l-4 bg-gray-50 text-sm space-y-2 animate-fadeIn">
+                    <div class="font-bold flex items-center space-x-2 text-aws-navy">
+                        <i class="fa-solid fa-circle-info text-aws-blue"></i>
+                        <span>Explicação Técnica AWS:</span>
+                    </div>
+                    <p id="q-explanation-text" class="text-gray-700 leading-relaxed text-xs md:text-sm">
+                        Detalhamento técnico da solução...
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer Navigation Controls -->
+            <div class="flex items-center justify-between pt-2">
+                <button id="btn-prev" onclick="app.prevQuestion()" class="bg-white border border-gray-300 hover:bg-gray-100 text-aws-navy font-bold py-2.5 px-5 rounded-xl text-sm transition flex items-center space-x-2 shadow-sm">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Anterior</span>
+                </button>
+
+                <div class="flex space-x-2">
+                    <button id="btn-next" onclick="app.nextQuestion()" class="bg-aws-navy hover:bg-aws-dark text-white font-bold py-2.5 px-5 rounded-xl text-sm transition flex items-center space-x-2 shadow-sm">
+                        <span>Próxima</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                    <button id="btn-finish" onclick="app.finishQuizConfirm()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <span>Finalizar Exame</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW 3: RESULTS / DETAILED REPORT ================= -->
+        <section id="view-results" class="hidden space-y-6">
+            <!-- Score Banner -->
+            <div id="result-banner" class="p-6 md:p-8 rounded-2xl text-white shadow-lg space-y-4 text-center">
+                <div id="result-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20">
+                    Aprovado
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold" id="result-score-percent">85%</h2>
+                <p id="result-score-detail" class="text-sm md:text-base opacity-90">
+                    Você acertou 21 de 25 questões (Nota de Corte Oficial AWS: 70%)
+                </p>
+
+                <!-- Domain breakdown stats -->
+                <div class="pt-4 border-t border-white/20 grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
+                    <div class="bg-black/10 p-3 rounded-xl">
+                        <span class="text-xs block opacity-80">Domínio 1</span>
+                        <span class="font-bold text-sm" id="dom-score-1">0%</span>
+                    </div>
+                    <div class="bg-black/10 p-3 rounded-xl">
+                        <span class="text-xs block opacity-80">Domínio 2</span>
+                        <span class="font-bold text-sm" id="dom-score-2">0%</span>
+                    </div>
+                    <div class="bg-black/10 p-3 rounded-xl">
+                        <span class="text-xs block opacity-80">Domínio 3</span>
+                        <span class="font-bold text-sm" id="dom-score-3">0%</span>
+                    </div>
+                    <div class="bg-black/10 p-3 rounded-xl">
+                        <span class="text-xs block opacity-80">Domínio 4</span>
+                        <span class="font-bold text-sm" id="dom-score-4">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <button onclick="app.showHome()" class="bg-aws-navy hover:bg-aws-dark text-white font-bold py-2.5 px-5 rounded-xl text-sm transition flex items-center space-x-2">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>Novo Simulado</span>
+                </button>
+
+                <!-- Filter Review Questions -->
+                <div class="flex space-x-1 bg-white p-1 rounded-xl border text-xs">
+                    <button onclick="app.filterReview('all')" id="rev-filter-all" class="px-3 py-1.5 rounded-lg font-semibold bg-aws-navy text-white">Todas</button>
+                    <button onclick="app.filterReview('wrong')" id="rev-filter-wrong" class="px-3 py-1.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-100">Incorretas</button>
+                    <button onclick="app.filterReview('flagged')" id="rev-filter-flagged" class="px-3 py-1.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-100">Sinalizadas 🚩</button>
+                </div>
+            </div>
+
+            <!-- Detailed Review List -->
+            <div id="review-list" class="space-y-4">
+                <!-- Dynamically populated review questions -->
+            </div>
+        </section>
+
+        <!-- ================= VIEW 4: HISTORY ================= -->
+        <section id="view-history" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-aws-navy">Histórico de Simulados</h2>
+                    <p class="text-xs text-gray-500">Seus resultados salvos localmente neste navegador.</p>
+                </div>
+                <button onclick="app.showHome()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-4 py-2 rounded-xl text-xs transition">
+                    Voltar
                 </button>
             </div>
-        </div>
+
+            <div id="history-container" class="space-y-3">
+                <!-- Dynamically populated history list -->
+            </div>
+        </section>
 
     </main>
 
+    <!-- ================= QUESTIONS GRID DRAWER / MODAL ================= -->
+    <div id="grid-drawer" class="fixed inset-0 z-50 hidden drawer-overlay flex justify-end transition-opacity">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between p-6 overflow-y-auto">
+            <div class="space-y-4">
+                <!-- Drawer Header -->
+                <div class="flex items-center justify-between border-b pb-3">
+                    <h3 class="font-bold text-aws-navy text-lg flex items-center">
+                        <i class="fa-solid fa-th mr-2 text-aws-orange"></i>
+                        Quadro de Questões
+                    </h3>
+                    <button onclick="app.toggleGridDrawer()" class="text-gray-400 hover:text-gray-700 text-xl font-bold p-1">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Drawer Filters -->
+                <div class="grid grid-cols-4 gap-1.5 text-xs text-center">
+                    <button onclick="app.filterGrid('all')" id="grid-flt-all" class="p-2 rounded-lg font-bold bg-aws-navy text-white">Todas</button>
+                    <button onclick="app.filterGrid('answered')" id="grid-flt-ans" class="p-2 rounded-lg font-bold bg-gray-100 text-gray-600">Respondidas</button>
+                    <button onclick="app.filterGrid('pending')" id="grid-flt-pnd" class="p-2 rounded-lg font-bold bg-gray-100 text-gray-600">Pendentes</button>
+                    <button onclick="app.filterGrid('flagged')" id="grid-flt-flg" class="p-2 rounded-lg font-bold bg-gray-100 text-gray-600">🚩 Marcadas</button>
+                </div>
+
+                <!-- Grid Buttons -->
+                <div id="grid-buttons-container" class="grid grid-cols-5 gap-2.5 pt-2">
+                    <!-- Dynamic Grid Buttons -->
+                </div>
+            </div>
+
+            <!-- Drawer Legend & Finish CTA -->
+            <div class="pt-6 border-t space-y-3">
+                <div class="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                    <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-aws-navy rounded"></span><span>Atual</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-blue-500 rounded"></span><span>Respondida</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-gray-200 border rounded"></span><span>Pendente</span></div>
+                    <div class="flex items-center space-x-2"><span class="text-amber-500 font-bold">🚩</span><span>Sinalizada</span></div>
+                </div>
+
+                <button onclick="app.finishQuizConfirm(); app.toggleGridDrawer();" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm transition">
+                    Finalizar Simulado Agora
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-aws-dark text-gray-400 text-xs py-4 px-4 text-center border-t border-gray-800">
+        <p class="max-w-4xl mx-auto">
+            Simulado AWS - praticando e aprendendo • Conteúdo alinhado com a certificação AWS Certified Cloud Practitioner (CLF-C02).
+        </p>
+    </footer>
+
+    <!-- Confirm Dialog Modal -->
+    <div id="modal-confirm" class="fixed inset-0 z-50 hidden drawer-overlay flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+            <h3 id="modal-title" class="font-bold text-lg text-aws-navy">Confirmar Ação</h3>
+            <p id="modal-msg" class="text-sm text-gray-600">Deseja realmente sair? Seu progresso será mantido.</p>
+            <div class="flex space-x-3 pt-2">
+                <button id="modal-btn-cancel" class="w-1/2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl text-xs transition">Cancelar</button>
+                <button id="modal-btn-ok" class="w-1/2 bg-aws-orange hover:bg-aws-orangeHover text-aws-navy font-bold py-2.5 rounded-xl text-xs transition">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= APPLICATION JAVASCRIPT ================= -->
     <script>
-        // --- BANCO DE QUESTÕES ---
-        const allQuestions = [
+        const QUESTION_BANK = [
+            // ================= DOMÁINIO 1: CONCEITOS DE NUVEM =================
             {
-                id: 1, level: "intermediario",
-                text: "Em cenários de migração para a AWS, como as empresas podem aplicar o AWS Application Discovery Service para auxiliá-las?",
+                id: 101,
+                domainId: 1,
+                question: "De acordo com o AWS Well-Architected Framework, qual pilar enfoca a prevenção e recuperação de falhas para atender às demandas de negócios?",
                 options: [
-                    "Para automatizar a migração de instâncias EC2 diretamente do on-premises.",
-                    "Para identificar e avaliar as dependências de aplicativos e servidores locais.",
-                    "Para monitorar o custo financeiro da migração em tempo real.",
-                    "Para configurar a rede híbrida (VPN) automaticamente."
+                    "A) Excelência Operacional",
+                    "B) Confiabilidade (Reliability)",
+                    "C) Eficiência de Desempenho",
+                    "D) Sustentabilidade"
                 ],
-                correctAnswers: [1],
-                explanation: "O AWS Application Discovery Service ajuda a coletar dados de utilização e dependência de ambientes on-premises para planejar a migração com precisão."
+                answer: 1,
+                explanation: "O pilar Confiabilidade (Reliability) garante que a carga de trabalho execute suas funções pretendidas corretamente e de forma consistente quando esperado, incluindo a capacidade de operar e se recuperar de falhas."
             },
             {
-                id: 2, level: "intermediario",
-                text: "Qual serviço da AWS simplifica o processo de conformidade ao garantir que apenas softwares licenciados estejam presentes na rede?",
+                id: 102,
+                domainId: 1,
+                question: "Qual benefício da nuvem AWS se refere à capacidade de implantar recursos globalmente em questão de minutos?",
                 options: [
-                    "AWS Config",
-                    "AWS Inspector",
-                    "License Manager",
-                    "AWS Artifact"
+                    "A) Economia de escala",
+                    "B) Alcance global em minutos",
+                    "C) Trocar despesas de capital por despesas operacionais",
+                    "D) Pare de adivinhar a capacidade"
                 ],
-                correctAnswers: [2],
-                explanation: "O License Manager facilita o gerenciamento, rastreamento e validação de licenças de software em conformidade com as regras dos fabricantes."
+                answer: 1,
+                explanation: "O alcance global da AWS permite implantar aplicações em múltiplas Regiões ao redor do mundo com apenas alguns cliques, proporcionando menor latência aos usuários a um custo mínimo."
             },
             {
-                id: 3, level: "intermediario",
-                text: "Qual é o banco de dados sem servidor (serverless) da AWS que oferece escalabilidade automática, suporte a esquemas flexíveis e é ideal para cargas de trabalho de baixa latência?",
+                id: 103,
+                domainId: 1,
+                question: "Qual pilar do AWS Cloud Adoption Framework (AWS CAF) se concentra na estruturação de equipes e no desenvolvimento de competências em nuvem?",
                 options: [
-                    "Amazon RDS",
-                    "Amazon Aurora",
-                    "Amazon Redshift",
-                    "DynamoDB"
+                    "A) Perspectiva de Negócios",
+                    "B) Perspectiva de Pessoas",
+                    "C) Perspectiva de Governança",
+                    "D) Perspectiva de Plataforma"
                 ],
-                correctAnswers: [3],
-                explanation: "O DynamoDB é um banco de dados NoSQL chave-valor totalmente gerenciado que escala infinitamente com alta performance, sendo serverless."
+                answer: 1,
+                explanation: "A perspectiva de Pessoas (People Perspective) do AWS CAF evolui a cultura, a estrutura organizacional e as competências necessárias para a transformação digital em nuvem."
             },
             {
-                id: 4, level: "dificil",
-                text: "Quais opções representam recursos fundamentais do AWS Cloud Adoption Framework (AWS CAF) para a perspectiva de segurança? (Selecione 3)",
+                id: 104,
+                domainId: 1,
+                question: "Qual o benefício financeiro de migrar do modelo de infraestrutura tradicional (On-Premises) para a Nuvem AWS?",
                 options: [
-                    "Monitoramento de atividades e auditoria de logs de segurança.",
-                    "Redução de custos operacionais com instâncias Spot.",
-                    "Implementação de controles de acesso baseados em identidade.",
-                    "Provisionamento de rede física global.",
-                    "Proteção de dados com criptografia em repouso e em trânsito."
+                    "A) Substituir CapEx (Despesas de Capital) por OpEx (Despesas Operacionais)",
+                    "B) Substituir OpEx por CapEx",
+                    "C) Eliminar custos com tráfego de rede",
+                    "D) Garantir custo zero em instâncias reservadas"
                 ],
-                correctAnswers: [0, 2, 4],
-                explanation: "A perspectiva de segurança do CAF foca em garantir a integridade, confidencialidade e disponibilidade dos dados e sistemas através de IAM, criptografia e auditoria."
+                answer: 0,
+                explanation: "Na nuvem AWS, você paga apenas pelo que consome (OpEx - Despesas Operacionais), em vez de investir pesadamente em hardware e data centers físicos antes de usá-los (CapEx - Despesas de Capital)."
             },
             {
-                id: 5, level: "intermediario",
-                text: "Qual serviço da AWS é recomendado para realizar uma grande quantidade de processos em lote (batch) com escalabilidade automática, sem provisionamento antecipado?",
+                id: 105,
+                domainId: 1,
+                question: "Como é chamada a capacidade da arquitetura de nuvem de ajustar automaticamente seus recursos para atender às variações de demanda de tráfego?",
                 options: [
-                    "AWS Lambda",
-                    "AWS Batch",
-                    "Amazon EC2 Auto Scaling",
-                    "AWS Step Functions"
+                    "A) Resiliência estática",
+                    "B) Elasticidade",
+                    "C) Alta Disponibilidade estritamente manual",
+                    "D) Tolerância a falhas estática"
                 ],
-                correctAnswers: [1],
-                explanation: "O AWS Batch gerencia de forma dinâmica os recursos computacionais necessários para rodar milhares de tarefas em lote de maneira eficiente."
+                answer: 1,
+                explanation: "A Elasticidade permite provisionar dinamicamente os recursos necessários para lidar com o aumento de carga e desalocá-los quando a demanda diminui."
             },
             {
-                id: 10, level: "facil",
-                text: "Quais são as principais características e funcionalidades do AWS Identity and Access Management (IAM)? (Selecione 3)",
+                id: 106,
+                domainId: 1,
+                question: "O que é uma Zona de Disponibilidade (Availability Zone - AZ) da AWS?",
                 options: [
-                    "Suporta integração com provedores externos para autenticação federada.",
-                    "Configura roteamento de rede entre VPCs.",
-                    "Oferece autenticação multifator (MFA).",
-                    "Realiza backup automático de instâncias EC2.",
-                    "Permite a criação de políticas detalhadas de controle de acesso."
+                    "A) Um data center único que atende um país inteiro.",
+                    "B) Um ou mais data centers discretos com energia, rede e conectividade redundantes em uma Região.",
+                    "C) Um ponto de presença para armazenamento em cache do CloudFront.",
+                    "D) Uma coleção de Regiões AWS conectadas por satélite."
                 ],
-                correctAnswers: [0, 2, 4],
-                explanation: "O IAM é o serviço central para gerenciar identidades, permitindo federação, MFA e políticas de permissões granulares."
+                answer: 1,
+                explanation: "Uma AZ consiste em um ou mais data centers físicos redundantes localizados dentro de uma Região AWS, projetados para isolamento de falhas."
+            },
+
+            // ================= DOMÁINIO 2: SEGURANÇA E CONFORMIDADE =================
+            {
+                id: 201,
+                domainId: 2,
+                question: "No Modelo de Responsabilidade Compartilhada da AWS, qual das seguintes tarefas é de responsabilidade EXCLUSIVA do cliente?",
+                options: [
+                    "A) Manutenção física dos servidores e hardware dos data centers.",
+                    "B) Atualização do firmware dos roteadores da infraestrutura global.",
+                    "C) Configuração de Grupos de Segurança (Security Groups) e regras de firewall da instância EC2.",
+                    "D) Descarte seguro de discos rígidos danificados."
+                ],
+                answer: 2,
+                explanation: "A AWS é responsável pela segurança 'DA' nuvem (hardware, data centers, hypervisors), enquanto o cliente é responsável pela segurança 'NA' nuvem (dados, regras de firewall, credenciais IAM e SO guest)."
             },
             {
-                id: 12, level: "intermediario",
-                text: "Qual serviço de rede de entrega de conteúdo (CDN) reduz a latência global na distribuição de vídeos, imagens e arquivos estáticos/dinâmicos?",
+                id: 202,
+                domainId: 2,
+                question: "Qual serviço do AWS IAM deve ser configurado para exigir uma segunda etapa de verificação além da senha no login?",
                 options: [
-                    "AWS Global Accelerator",
-                    "Amazon Route 53",
-                    "AWS Direct Connect",
-                    "Amazon CloudFront"
+                    "A) AWS Key Management Service (KMS)",
+                    "B) Autenticação Multifator (MFA)",
+                    "C) Single Sign-On (SSO)",
+                    "D) AWS Shield Advanced"
                 ],
-                correctAnswers: [3],
-                explanation: "O CloudFront utiliza uma rede global de pontos de presença (Edge Locations) para fazer cache de conteúdo próximo aos usuários finais."
+                answer: 1,
+                explanation: "O MFA adiciona uma camada extra de proteção ao exigir uma chave de segurança ou código de um aplicativo autenticador ao fazer login."
             },
             {
-                id: 17, level: "facil",
-                text: "Quais são os 6 pilares do Well-Architected Framework da AWS?",
+                id: 203,
+                domainId: 2,
+                question: "Qual serviço AWS é um serviço gerenciado de detecção de ameaças que monitora continuamente suas contas e cargas de trabalho em busca de atividades maliciosas?",
                 options: [
-                    "Excelência Operacional, Segurança, Confiabilidade, Desempenho Eficiente, Escalabilidade, Disciplina.",
-                    "Excelência Operacional, Segurança, Confiabilidade, Desempenho Eficiente, Otimização de Custos, Sustentabilidade.",
-                    "Desenvolvimento, Operações, Segurança, Confiabilidade, Elasticidade, Sustentabilidade."
+                    "A) Amazon Inspector",
+                    "B) AWS WAF",
+                    "C) Amazon GuardDuty",
+                    "D) AWS Secrets Manager"
                 ],
-                correctAnswers: [1],
-                explanation: "Os 6 pilares são: Excelência operacional, Segurança, Confiabilidade, Eficiência de performance, Otimização de custos e Sustentabilidade."
+                answer: 2,
+                explanation: "O Amazon GuardDuty utiliza inteligência artificial e aprendizado de máquina para analisar logs da AWS (CloudTrail, VPC Flow Logs, DNS) e detectar ameaças à segurança."
+            },
+            {
+                id: 204,
+                domainId: 2,
+                question: "Qual serviço da AWS oferece acesso sob demanda a relatórios de conformidade e acordos de segurança da AWS?",
+                options: [
+                    "A) AWS Artifact",
+                    "B) AWS Trusted Advisor",
+                    "C) AWS Security Hub",
+                    "D) Amazon Macie"
+                ],
+                answer: 0,
+                explanation: "O AWS Artifact é um portal centralizado para download de relatórios de auditoria, certificações ISO/PCI-DSS e acordos de conformidade da AWS."
+            },
+            {
+                id: 205,
+                domainId: 2,
+                question: "Qual a principal diferença entre um Grupo de Segurança (Security Group) e uma Lista de Controle de Acesso à Rede (NACL) na AWS?",
+                options: [
+                    "A) Security Groups funcionam no nível de subrede e são stateless; NACLs funcionam no nível de instância e são stateful.",
+                    "B) Security Groups funcionam no nível de instância e são stateful; NACLs funcionam no nível de subrede e são stateless.",
+                    "C) NACLs não permitem regras de negação (Deny).",
+                    "D) Security Groups aplicam-se a dados armazenados no S3."
+                ],
+                answer: 1,
+                explanation: "Os Security Groups atuam como firewalls virtuais na instância (stateful - respostas são permitidas automaticamente). As NACLs atuam na subrede (stateless - regras de entrada e saída devem ser configuradas separadamente)."
+            },
+
+            // ================= DOMÁINIO 3: TECNOLOGIA E SERVIÇOS =================
+            {
+                id: 301,
+                domainId: 3,
+                question: "Um desenvolvedor precisa executar um código em resposta a eventos (como upload de imagens no S3) sem gerenciar servidores. Qual serviço deve ser utilizado?",
+                options: [
+                    "A) Amazon EC2",
+                    "B) AWS Lambda",
+                    "C) Amazon ECS",
+                    "D) AWS Lightsail"
+                ],
+                answer: 1,
+                explanation: "O AWS Lambda é o serviço de computação serverless que executa seu código automaticamente em resposta a gatilhos sem necessidade de provisionar ou gerenciar servidores."
+            },
+            {
+                id: 302,
+                domainId: 3,
+                question: "Qual classe de armazenamento do Amazon S3 é mais indicada para dados acessados raramente, mas que exigem recuperação imediata em milissegundos?",
+                options: [
+                    "A) S3 Standard-Infrequent Access (S3 Standard-IA)",
+                    "B) S3 Glacier Flexible Retrieval",
+                    "C) S3 Glacier Deep Archive",
+                    "D) S3 Outposts"
+                ],
+                answer: 0,
+                explanation: "O S3 Standard-IA oferece menor custo de armazenamento para dados acessados com menor frequência, garantindo tempo de resposta em milissegundos."
+            },
+            {
+                id: 303,
+                domainId: 3,
+                question: "Qual serviço AWS atua como uma rede de distribuição de conteúdo (CDN) global para entregar dados, vídeos e APIs com baixa latência?",
+                options: [
+                    "A) Amazon Route 53",
+                    "B) AWS Direct Connect",
+                    "C) Amazon CloudFront",
+                    "D) AWS Global Accelerator"
+                ],
+                answer: 2,
+                explanation: "O Amazon CloudFront distribui conteúdo globalmente usando os Pontos de Presença (Edge Locations) da AWS para mitigar latência."
+            },
+            {
+                id: 304,
+                domainId: 3,
+                question: "Qual banco de dados totalmente gerenciado da AWS é do tipo NoSQL, oferecendo desempenho de latência inferior a 10 milissegundos em qualquer escala?",
+                options: [
+                    "A) Amazon RDS",
+                    "B) Amazon Aurora",
+                    "C) Amazon DynamoDB",
+                    "D) Amazon Redshift"
+                ],
+                answer: 2,
+                explanation: "O Amazon DynamoDB é um banco de dados NoSQL chave-valor e documentos sem servidor, ideal para aplicações de altíssima escala."
+            },
+            {
+                id: 305,
+                domainId: 3,
+                question: "Qual é a principal função do serviço Amazon Route 53?",
+                options: [
+                    "A) Gerenciar rotas de tráfego entre VPCs utilizando Peering.",
+                    "B) Fornecer serviço de DNS (Domain Name System) altamente disponível e escalável.",
+                    "C) Criar conexões dedicadas privadas da empresa para a AWS.",
+                    "D) Inspecionar pacotes HTTP contra ataques de injeção SQL."
+                ],
+                answer: 1,
+                explanation: "O Amazon Route 53 é um serviço de DNS em nuvem projetado para traduzir nomes de domínio (ex: exemplo.com) em endereços IP."
+            },
+            {
+                id: 306,
+                domainId: 3,
+                question: "Qual tipo de armazenamento de bloco persistente é anexado a uma instância EC2, funcionando similar a um disco rígido físico?",
+                options: [
+                    "A) Amazon EFS",
+                    "B) Amazon EBS (Elastic Block Store)",
+                    "C) Amazon S3 Glacier",
+                    "D) AWS Storage Gateway"
+                ],
+                answer: 1,
+                explanation: "O Amazon EBS oferece volumes de armazenamento em blocos de alto desempenho para uso com instâncias Amazon EC2."
+            },
+
+            // ================= DOMÁINIO 4: COBRANÇA, FINANÇAS E SUPORTE =================
+            {
+                id: 401,
+                domainId: 4,
+                question: "Qual ferramenta da AWS permite criar alertas personalizados quando seus custos ou uso estimado de nuvem ultrapassarem limites definidos?",
+                options: [
+                    "A) AWS Cost Explorer",
+                    "B) AWS Budgets",
+                    "C) AWS Pricing Calculator",
+                    "D) AWS License Manager"
+                ],
+                answer: 1,
+                explanation: "O AWS Budgets permite definir orçamentos personalizados que alertam você por e-mail ou SNS quando seus custos ou uso excedem o limite estipulado."
+            },
+            {
+                id: 402,
+                domainId: 4,
+                question: "Qual plano de suporte AWS oferece suporte técnico 24x7 via telefone, chat e e-mail com tempo de resposta inferior a 1 hora para falhas produtivas?",
+                options: [
+                    "A) AWS Basic Support",
+                    "B) AWS Developer Support",
+                    "C) AWS Business Support",
+                    "D) AWS Free Support"
+                ],
+                answer: 2,
+                explanation: "O plano AWS Business Support fornece acesso 24x7 a engenheiros de suporte por telefone, chat e e-mail com resposta em menos de 1 hora para sistemas de produção parados."
+            },
+            {
+                id: 403,
+                domainId: 4,
+                question: "Qual recurso do AWS Organizations permite consolidar o pagamento de múltiplas contas AWS sob uma única fatura com descontos por volume?",
+                options: [
+                    "A) Cost Explorer Aggregator",
+                    "B) Faturamento Consolidado (Consolidated Billing)",
+                    "C) AWS Marketplace Shared Billing",
+                    "D) AWS Service Catalog"
+                ],
+                answer: 1,
+                explanation: "O Faturamento Consolidado combina o uso de todas as contas vinculadas em uma organização, permitindo obter descontos por escala de volume."
+            },
+            {
+                id: 404,
+                domainId: 4,
+                question: "Uma empresa deseja estimar os custos de arquitetura de nuvem ANTES de implantá-la na AWS. Qual ferramenta deve ser utilizada?",
+                options: [
+                    "A) AWS Cost Explorer",
+                    "B) AWS Pricing Calculator",
+                    "C) Relatórios de Custo e Uso da AWS (CUR)",
+                    "D) AWS Compute Optimizer"
+                ],
+                answer: 1,
+                explanation: "A AWS Pricing Calculator é uma ferramenta web de modelagem para estimar os custos mensais de serviços AWS com base na arquitetura pretendida."
+            },
+            {
+                id: 405,
+                domainId: 4,
+                question: "O que oferece o programa AWS Free Tier (Nível Gratuito)?",
+                options: [
+                    "A) Uso ilimitado de todos os serviços AWS por tempo indeterminado.",
+                    "B) Três tipos de ofertas: Testes gratuitos, 12 meses grátis e Sempre grátis.",
+                    "C) Créditos de $1.000 para qualquer nova conta criada.",
+                    "D) Acesso gratuito e ilimitado a instâncias EC2 grandes."
+                ],
+                answer: 1,
+                explanation: "O AWS Free Tier inclui ofertas categorizadas em: Sempre grátis (como 1 milhão de requisições Lambda/mês), 12 meses grátis após o cadastro e Testes de curta duração."
             }
         ];
 
-        // --- ESTADO DA APLICAÇÃO ---
-        let state = {
-            history: [],
-            currentSession: null
-        };
+        class AWSQuizApp {
+            constructor() {
+                this.state = {
+                    domain: 0,              // 0: All, 1-4: Specific domain
+                    count: 25,              // Question limit or 'all'
+                    mode: 'practice',       // 'practice' or 'exam'
+                    questions: [],
+                    currentIndex: 0,
+                    userAnswers: {},        // { qIndex: selectedOptionIndex }
+                    flagged: {},            // { qIndex: boolean }
+                    examTimeLeft: 5400,     // 90 minutes in seconds
+                    timerInterval: null,
+                    gridFilter: 'all',      // 'all', 'answered', 'pending', 'flagged'
+                    reviewFilter: 'all'
+                };
 
-        // --- STREAMING_CHUNK:Lógica de Inicialização ---
-        function initApp() {
-            const savedState = localStorage.getItem('awsSimulatorState');
-            if (savedState) {
-                try { state = JSON.parse(savedState); } 
-                catch (e) { console.error("Erro ao carregar histórico", e); }
+                this.dom = {
+                    views: {
+                        home: document.getElementById('view-home'),
+                        quiz: document.getElementById('view-quiz'),
+                        results: document.getElementById('view-results'),
+                        history: document.getElementById('view-history')
+                    },
+                    headerQuizInfo: document.getElementById('header-quiz-info'),
+                    headerProgress: document.getElementById('header-progress'),
+                    timerContainer: document.getElementById('timer-container'),
+                    timerDisplay: document.getElementById('timer-display'),
+                    drawer: document.getElementById('grid-drawer'),
+                    gridContainer: document.getElementById('grid-buttons-container'),
+                    modal: document.getElementById('modal-confirm')
+                };
+
+                this.initApp();
             }
 
-            document.getElementById('setup-form').addEventListener('submit', startNewQuiz);
-            document.getElementById('btn-home').addEventListener('click', goHome);
-            document.getElementById('btn-next').addEventListener('click', handleNext);
-            document.getElementById('btn-prev').addEventListener('click', handlePrev);
-            document.getElementById('btn-finish').addEventListener('click', finishQuiz);
-            document.getElementById('btn-confirm').addEventListener('click', handleConfirm);
-
-            renderStartScreen();
-        }
-
-        function saveState() {
-            localStorage.setItem('awsSimulatorState', JSON.stringify(state));
-        }
-
-        // --- STREAMING_CHUNK:Lógica da Tela Inicial ---
-        function renderStartScreen() {
-            document.getElementById('screen-start').classList.remove('hidden');
-            document.getElementById('screen-quiz').classList.add('hidden');
-            document.getElementById('screen-results').classList.add('hidden');
-            document.getElementById('btn-home').classList.add('hidden');
-
-            const historyContainer = document.getElementById('history-container');
-            historyContainer.innerHTML = '';
-
-            if (state.history.length === 0) {
-                historyContainer.innerHTML = '<p class="text-sm text-gray-500 text-center mt-10">Nenhum simulado no histórico.</p>';
-            } else {
-                [...state.history].reverse().forEach((session, index) => {
-                    const actualIndex = state.history.length - 1 - index;
-                    const date = new Date(session.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
-                    
-                    const isCompleted = session.status === 'completed';
-                    const scoreText = isCompleted ? `Nota: ${(session.score * 100).toFixed(0)}%` : 'Em andamento';
-                    
-                    const el = document.createElement('div');
-                    el.className = `p-4 rounded-lg border flex justify-between items-center ${isCompleted ? 'bg-gray-50' : 'bg-blue-50 border-blue-200'}`;
-                    el.innerHTML = `
-                        <div>
-                            <div class="font-bold text-sm text-gray-800">Simulado ${session.level.toUpperCase()}</div>
-                            <div class="text-xs text-gray-500 mt-1">${date} • ${session.mode === 'teste' ? 'Modo Teste' : 'Modo Exame'}</div>
-                            <div class="text-sm font-semibold mt-1 ${isCompleted ? (session.score >= 0.7 ? 'text-green-600' : 'text-red-500') : 'text-blue-600'}">${scoreText}</div>
-                        </div>
-                        <button onclick="${isCompleted ? `viewResults(${actualIndex})` : `continueQuiz(${actualIndex})`}" 
-                                class="px-3 py-1.5 rounded text-sm font-medium ${isCompleted ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'aws-bg-orange text-white hover:bg-orange-600'} transition">
-                            ${isCompleted ? 'Revisar' : 'Continuar'}
-                        </button>
-                    `;
-                    historyContainer.appendChild(el);
-                });
-            }
-        }
-
-        // --- STREAMING_CHUNK:Lógica de Criação do Quiz ---
-        function startNewQuiz(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const level = formData.get('level');
-            const count = parseInt(formData.get('count'));
-            const mode = formData.get('mode');
-
-            let pool = allQuestions; 
-            let selectedQuestions = [];
-            let iterations = 0;
-            
-            // Simula banco maior duplicando/embaralhando caso count > disponíveis
-            while(selectedQuestions.length < count && iterations < 5) {
-                let shuffled = [...pool].sort(() => 0.5 - Math.random());
-                for(let q of shuffled) {
-                    if (selectedQuestions.length < count) {
-                        selectedQuestions.push(JSON.parse(JSON.stringify(q)));
-                    }
-                }
-                iterations++;
-            }
-
-            state.currentSession = {
-                id: Date.now(),
-                date: new Date().toISOString(),
-                level: level,
-                mode: mode,
-                total: selectedQuestions.length,
-                questions: selectedQuestions,
-                currentIndex: 0,
-                userAnswers: {}, 
-                confirmedAnswers: {}, // NOVA PROPRIEDADE: Controla se a questão já foi avaliada
-                status: 'in-progress'
-            };
-
-            state.history.push(state.currentSession);
-            saveState();
-            loadQuizScreen();
-        }
-
-        function continueQuiz(historyIndex) {
-            state.currentSession = state.history[historyIndex];
-            // Garante compatibilidade caso o histórico não tenha a propriedade
-            if(!state.currentSession.confirmedAnswers) state.currentSession.confirmedAnswers = {};
-            loadQuizScreen();
-        }
-
-        function goHome() {
-            state.currentSession = null;
-            renderStartScreen();
-        }
-
-        // --- STREAMING_CHUNK:Lógica de Renderização do Quiz ---
-        function loadQuizScreen() {
-            document.getElementById('screen-start').classList.add('hidden');
-            document.getElementById('screen-results').classList.add('hidden');
-            document.getElementById('screen-quiz').classList.remove('hidden');
-            document.getElementById('btn-home').classList.remove('hidden');
-
-            renderCurrentQuestion();
-        }
-
-        function renderCurrentQuestion() {
-            const session = state.currentSession;
-            const q = session.questions[session.currentIndex];
-            const isMulti = q.correctAnswers.length > 1;
-            const qKey = `${session.currentIndex}`;
-
-            document.getElementById('quiz-progress-text').innerText = `Questão ${session.currentIndex + 1} de ${session.total}`;
-            document.getElementById('quiz-progress-bar').style.width = `${((session.currentIndex + 1) / session.total) * 100}%`;
-            document.getElementById('quiz-mode-badge').innerText = session.mode === 'teste' ? 'Modo Teste' : 'Modo Exame';
-            
-            document.getElementById('question-text').innerText = q.text;
-            document.getElementById('question-instruction').innerText = isMulti ? `(Selecione exatamente ${q.correctAnswers.length} opções corretas)` : "(Selecione 1 opção correta)";
-
-            const container = document.getElementById('options-container');
-            container.innerHTML = '';
-            
-            const selectedSet = new Set(session.userAnswers[qKey] || []);
-            const isAnswered = selectedSet.size > 0;
-            
-            // NOVA LÓGICA: Só mostra feedback no Modo Teste SE a resposta já foi confirmada
-            const isConfirmed = session.mode === 'exame' ? false : !!session.confirmedAnswers[qKey];
-            const showTestFeedback = session.mode === 'teste' && isConfirmed;
-
-            q.options.forEach((opt, index) => {
-                const el = document.createElement('div');
-                const isSelected = selectedSet.has(index);
-                const isCorrect = q.correctAnswers.includes(index);
+            initApp() {
+                this.registerPWA();
+                this.loadSavedState();
                 
-                let extraClasses = 'border-gray-200 hover:border-gray-300 hover:bg-gray-50';
-                
-                if (isSelected) extraClasses = 'selected';
-                
-                if (showTestFeedback) {
-                    if (isCorrect) extraClasses = 'correct';
-                    else if (isSelected && !isCorrect) extraClasses = 'wrong';
-                    else extraClasses = 'border-gray-200 opacity-50'; // escurece as não selecionadas e não corretas
-                }
-
-                // Se já confirmou, desabilita cliques
-                const pointerEvent = isConfirmed ? 'pointer-events-none opacity-90' : 'cursor-pointer';
-                
-                el.className = `option-card border-2 rounded-lg p-4 transition flex gap-3 items-start ${extraClasses} ${pointerEvent}`;
-                
-                if (!isConfirmed) {
-                    el.onclick = () => handleOptionSelect(index, isMulti, q.correctAnswers.length);
-                }
-
-                const inputType = isMulti ? 'checkbox' : 'radio';
-                const inputChecked = isSelected ? 'checked' : '';
-                
-                el.innerHTML = `
-                    <div class="mt-0.5">
-                        <input type="${inputType}" class="w-5 h-5 text-orange-500 rounded border-gray-300 pointer-events-none" ${inputChecked}>
-                    </div>
-                    <div class="text-gray-700 font-medium">${opt}</div>
-                `;
-                container.appendChild(el);
-            });
-
-            // Lógica do Quadro de Feedback
-            const fbContainer = document.getElementById('feedback-container');
-            if (showTestFeedback) {
-                fbContainer.classList.remove('hidden');
-                
-                const isFullyCorrect = selectedSet.size === q.correctAnswers.length && 
-                                      [...selectedSet].every(val => q.correctAnswers.includes(val));
-                
-                if (isFullyCorrect) {
-                    fbContainer.className = 'mb-6 p-5 rounded-lg border border-green-200 bg-green-50';
-                    document.getElementById('feedback-title').innerHTML = '✅ Correto!';
-                    document.getElementById('feedback-title').className = 'font-bold text-lg mb-2 text-green-700';
-                } else {
-                    fbContainer.className = 'mb-6 p-5 rounded-lg border border-red-200 bg-red-50';
-                    document.getElementById('feedback-title').innerHTML = '❌ Incorreto';
-                    document.getElementById('feedback-title').className = 'font-bold text-lg mb-2 text-red-700';
-                }
-                
-                // Formata quais eram as respostas corretas
-                const correctTexts = q.correctAnswers.map(idx => `• ${q.options[idx]}`).join('<br>');
-                
-                document.getElementById('feedback-text').innerHTML = `
-                    <div class="mb-3 text-gray-800">
-                        <strong class="block mb-1">A(s) resposta(s) correta(s):</strong>
-                        ${correctTexts}
-                    </div>
-                    <div class="pt-3 border-t border-gray-200/60">
-                        <strong class="block mb-1 text-gray-800">Explicação:</strong>
-                        ${q.explanation}
-                    </div>
-                `;
-            } else {
-                fbContainer.classList.add('hidden');
-            }
-
-            updateControls(isAnswered, isConfirmed, isMulti, selectedSet.size, q.correctAnswers.length);
-        }
-
-        // --- STREAMING_CHUNK:Lógica de Interação e Controles ---
-        function updateControls(isAnswered, isConfirmed, isMulti, selectedCount, requiredCount) {
-            const session = state.currentSession;
-            
-            document.getElementById('btn-prev').disabled = session.currentIndex === 0;
-            
-            const btnNext = document.getElementById('btn-next');
-            const btnFinish = document.getElementById('btn-finish');
-            const btnConfirm = document.getElementById('btn-confirm');
-            
-            const isLast = session.currentIndex === session.total - 1;
-
-            if (session.mode === 'teste') {
-                if (isConfirmed) {
-                    // Já validou a resposta, esconde confirmar, mostra próximo
-                    btnConfirm.classList.add('hidden');
-                    
-                    if (isLast) {
-                        btnNext.classList.add('hidden');
-                        btnFinish.classList.remove('hidden');
-                    } else {
-                        btnNext.classList.remove('hidden');
-                        btnFinish.classList.add('hidden');
-                    }
-                } else {
-                    // Ainda não validou a resposta
-                    btnConfirm.classList.remove('hidden');
-                    btnNext.classList.add('hidden');
-                    btnFinish.classList.add('hidden');
-                    
-                    // Só habilita o confirmar se selecionou exatamente o número exigido de opções
-                    const hasRequiredAnswers = isMulti ? selectedCount === requiredCount : isAnswered;
-                    btnConfirm.disabled = !hasRequiredAnswers;
-                }
-            } else {
-                // Modo Exame (sem botão confirmar intermediário)
-                btnConfirm.classList.add('hidden');
-                
-                if (isLast) {
-                    btnNext.classList.add('hidden');
-                    btnFinish.classList.remove('hidden');
-                } else {
-                    btnNext.classList.remove('hidden');
-                    btnFinish.classList.add('hidden');
-                }
-            }
-        }
-
-        function handleOptionSelect(optIndex, isMulti, maxAllowed) {
-            const session = state.currentSession;
-            const qKey = `${session.currentIndex}`;
-            let currentSelections = session.userAnswers[qKey] || [];
-            
-            if (isMulti) {
-                if (currentSelections.includes(optIndex)) {
-                    // Desmarcar
-                    currentSelections = currentSelections.filter(i => i !== optIndex);
-                } else {
-                    // Marcar (só permite marcar até o limite estabelecido na questão)
-                    if (currentSelections.length < maxAllowed) {
-                        currentSelections.push(optIndex);
-                    }
-                }
-            } else {
-                // Radio button substitui a seleção
-                currentSelections = [optIndex];
-            }
-            
-            session.userAnswers[qKey] = currentSelections;
-            saveState();
-            renderCurrentQuestion();
-        }
-
-        function handleConfirm() {
-            const session = state.currentSession;
-            const qKey = `${session.currentIndex}`;
-            session.confirmedAnswers[qKey] = true;
-            saveState();
-            renderCurrentQuestion();
-        }
-
-        function handleNext() {
-            if (state.currentSession.currentIndex < state.currentSession.total - 1) {
-                state.currentSession.currentIndex++;
-                saveState();
-                renderCurrentQuestion();
-            }
-        }
-
-        function handlePrev() {
-            if (state.currentSession.currentIndex > 0) {
-                state.currentSession.currentIndex--;
-                saveState();
-                renderCurrentQuestion();
-            }
-        }
-
-        // --- STREAMING_CHUNK:Lógica de Finalização e Resultados ---
-        function finishQuiz() {
-            const session = state.currentSession;
-            let score = 0;
-            let incorrectQs = [];
-
-            session.questions.forEach((q, index) => {
-                const ans = session.userAnswers[`${index}`] || [];
-                // Para estar correta, tem que ter marcado a mesma quantidade e as mesmas alternativas
-                const isCorrect = ans.length === q.correctAnswers.length && ans.every(v => q.correctAnswers.includes(v));
-                if (isCorrect) {
-                    score++;
-                } else {
-                    incorrectQs.push({ q: q, userAns: ans, index: index + 1 });
-                }
-            });
-
-            session.status = 'completed';
-            session.score = score / session.total;
-            session.incorrectLog = incorrectQs;
-            saveState();
-
-            const historyIndex = state.history.findIndex(s => s.id === session.id);
-            viewResults(historyIndex);
-        }
-
-        function viewResults(historyIndex) {
-            const session = state.history[historyIndex];
-            
-            document.getElementById('screen-start').classList.add('hidden');
-            document.getElementById('screen-quiz').classList.add('hidden');
-            document.getElementById('screen-results').classList.remove('hidden');
-            document.getElementById('btn-home').classList.remove('hidden');
-
-            const percent = Math.round(session.score * 100);
-            document.getElementById('score-percent').innerText = `${percent}%`;
-            
-            const circle = document.getElementById('score-circle-progress');
-            const circumference = 2 * Math.PI * 46; 
-            const offset = circumference - (percent / 100) * circumference;
-            setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
-            
-            const isPass = percent >= 70;
-            circle.classList.remove('aws-text-orange', 'text-green-500', 'text-red-500');
-            circle.classList.add(isPass ? 'text-green-500' : 'text-red-500');
-            
-            const scoreText = document.getElementById('score-text');
-            if (isPass) {
-                scoreText.innerHTML = `🎉 Parabéns! Você foi <strong>Aprovado</strong>.`;
-                scoreText.className = "mt-4 text-lg font-medium text-green-600";
-            } else {
-                scoreText.innerHTML = `⚠️ Não foi dessa vez. Pontuação mínima exigida: 70%.`;
-                scoreText.className = "mt-4 text-lg font-medium text-red-600";
-            }
-
-            const reviewContainer = document.getElementById('review-container');
-            reviewContainer.innerHTML = '';
-
-            if (session.incorrectLog && session.incorrectLog.length > 0) {
-                session.incorrectLog.forEach(log => {
-                    const q = log.q;
-                    const el = document.createElement('div');
-                    el.className = "bg-gray-50 border border-gray-200 rounded-lg p-5";
-                    
-                    let optionsHTML = '';
-                    q.options.forEach((opt, i) => {
-                        const isUserSel = log.userAns.includes(i);
-                        const isCorrect = q.correctAnswers.includes(i);
-                        
-                        let badge = '';
-                        let textClass = 'text-gray-600';
-                        if (isCorrect) {
-                            badge = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded ml-2 font-bold uppercase">Correta</span>';
-                            textClass = 'text-green-800 font-medium';
-                        } else if (isUserSel && !isCorrect) {
-                            badge = '<span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded ml-2 font-bold uppercase">Seu Erro</span>';
-                            textClass = 'text-red-800 line-through opacity-80';
-                        }
-                        
-                        optionsHTML += `<li class="flex items-start mt-2 text-sm ${textClass}">
-                            <span class="mr-2 mt-0.5">▪</span> 
-                            <span>${opt} ${badge}</span>
-                        </li>`;
+                // Add domain card click bindings
+                document.querySelectorAll('.domain-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.domain-card').forEach(c => c.classList.remove('border-aws-orange', 'bg-amber-50/40'));
+                        card.classList.add('border-aws-orange', 'bg-amber-50/40');
+                        const radio = card.querySelector('input[type="radio"]');
+                        if (radio) radio.checked = true;
                     });
-
-                    el.innerHTML = `
-                        <h4 class="font-bold text-gray-800 mb-2">Questão ${log.index}:</h4>
-                        <p class="text-gray-700 text-sm mb-3">${q.text}</p>
-                        <ul class="mb-4 space-y-1 ml-2">
-                            ${optionsHTML}
-                        </ul>
-                        <div class="bg-blue-50 border-l-4 border-blue-500 p-3 text-sm text-blue-900 rounded-r">
-                            <strong class="block mb-1">Por que esta é a resposta?</strong>
-                            ${q.explanation}
-                        </div>
-                    `;
-                    reviewContainer.appendChild(el);
                 });
-            } else {
-                reviewContainer.innerHTML = '<p class="text-green-600 font-bold p-4 bg-green-50 rounded border border-green-200">Impressionante! Você acertou todas as questões do simulado.</p>';
-            }
-        }
 
-        window.addEventListener('DOMContentLoaded', initApp);
-    </script>
-</body>
-</html>
+                // Mode selection bindings
+                document.querySelectorAll('.mode-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('border-aws-orange', 'bg-amber-50/40'));
+                        card.classList.add('border-aws-orange', 'bg-amber-50/40');
+                        const radio = card.querySelector('input[type="radio"]');
+                        if (radio) radio.checked = true;
+                    });
+                });
+            }
+
+            setQuestionCount(count) {
+                this.state.count = count;
+                document.querySelectorAll('.count-btn').forEach(btn => {
+                    btn.classList.remove('border-aws-orange', 'bg-amber-50');
+                    btn.classList.add('border-gray-200');
+                });
+                const activeBtn = document.getElementById(`count-btn-${count}`);
+                if (activeBtn) {
+                    activeBtn.classList.remove('border-gray-200');
+                    activeBtn.classList.add('border-aws-orange', 'bg-amber-50');
+                }
+            }
+
+            startQuiz() {
+                // Get selected domain
+                const domainRadio = document.querySelector('input[name="domain"]:checked');
+                this.state.domain = parseInt(domainRadio ? domainRadio.value : '0');
+
+                // Get selected mode
+                const modeRadio = document.querySelector('input[name="mode"]:checked');
+                this.state.mode = modeRadio ? modeRadio.value : 'practice';
+
+                // Filter Question Bank
+                let available = [...QUESTION_BANK];
+                if (this.state.domain !== 0) {
+                    available = available.filter(q => q.domainId === this.state.domain);
+                }
+
+                // Shuffle questions
+                available.sort(() => Math.random() - 0.5);
+
+                // Slice by selected count
+                let targetCount = this.state.count === 'all' ? available.length : parseInt(this.state.count);
+                if (targetCount > available.length) targetCount = available.length;
+
+                this.state.questions = available.slice(0, targetCount);
+                this.state.currentIndex = 0;
+                this.state.userAnswers = {};
+                this.state.flagged = {};
+                this.state.examTimeLeft = 5400; // 90 min
+
+                if (this.state.questions.length === 0) {
+                    alert('Nenhuma questão encontrada para os filtros selecionados.');
+                    return;
+                }
+
+                // Show Quiz View
+                this.switchView('quiz');
+                this.dom.headerQuizInfo.classList.remove('hidden');
+
+                // Configure Badges
+                const domainNames = {
+                    0: 'Todos os Domínios',
+                    1: 'Domínio 1: Conceitos',
+                    2: 'Domínio 2: Segurança',
+                    3: 'Domínio 3: Tecnologia',
+                    4: 'Domínio 4: Cobrança & Suporte'
+                };
+                document.getElementById('quiz-domain-badge').textContent = domainNames[this.state.domain];
+                document.getElementById('quiz-mode-badge').textContent = this.state.mode === 'practice' ? 'Modo Teste' : 'Modo Exame';
+
+                // Timer Setup
+                if (this.state.mode === 'exam') {
+                    this.dom.timerContainer.classList.remove('hidden');
+                    this.dom.timerContainer.classList.add('flex');
+                    this.startTimer();
+                } else {
+                    this.dom.timerContainer.classList.add('hidden');
+                    this.dom.timerContainer.classList.remove('flex');
+                    if (this.state.timerInterval) clearInterval(this.state.timerInterval);
+                }
+
+                this.renderQuestion();
+                this.saveActiveState();
+            }
+
+            renderQuestion() {
+                const q = this.state.questions[this.state.currentIndex];
+                const total = this.state.questions.length;
+
+                // Update Header progress
+                this.dom.headerProgress.textContent = `Questão ${this.state.currentIndex + 1}/${total}`;
+                document.getElementById('q-number-title').textContent = `Questão ${this.state.currentIndex + 1} de ${total} • Domínio ${q.domainId}`;
+                document.getElementById('q-text').textContent = q.question;
+
+                // Options Container
+                const container = document.getElementById('q-options');
+                container.innerHTML = '';
+
+                const selected = this.state.userAnswers[this.state.currentIndex];
+
+                q.options.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `option-btn w-full text-left p-4 rounded-xl border-2 font-medium text-sm flex items-start space-x-3 transition `;
+
+                    let borderStyle = 'border-gray-200 bg-white hover:border-aws-orange hover:bg-amber-50/20';
+
+                    if (this.state.mode === 'practice') {
+                        if (selected !== undefined) {
+                            if (optIdx === q.answer) {
+                                borderStyle = 'border-green-500 bg-green-50 text-green-900 font-semibold';
+                            } else if (selected === optIdx) {
+                                borderStyle = 'border-red-500 bg-red-50 text-red-900 font-semibold';
+                            } else {
+                                borderStyle = 'border-gray-200 bg-white opacity-60';
+                            }
+                        }
+                    } else {
+                        // Exam Mode styling
+                        if (selected === optIdx) {
+                            borderStyle = 'border-aws-orange bg-amber-50 text-aws-navy font-bold shadow-sm';
+                        }
+                    }
+
+                    btn.className += borderStyle;
+                    btn.onclick = () => this.selectOption(optIdx);
+
+                    btn.innerHTML = `
+                        <span class="w-6 h-6 rounded-full border flex items-center justify-center text-xs shrink-0 ${selected === optIdx ? 'bg-aws-navy text-white border-aws-navy' : 'border-gray-400 text-gray-500'}">
+                            ${String.fromCharCode(65 + optIdx)}
+                        </span>
+                        <span class="leading-relaxed">${optText}</span>
+                    `;
+                    container.appendChild(btn);
+                });
+
+                // Explanation Box Handling
+                const expBox = document.getElementById('q-explanation');
+                if (this.state.mode === 'practice' && selected !== undefined) {
+                    expBox.classList.remove('hidden');
+                    document.getElementById('q-explanation-text').textContent = q.explanation;
+                    expBox.className = `p-4 rounded-xl border-l-4 text-sm space-y-2 animate-fadeIn ${selected === q.answer ? 'border-green-500 bg-green-50/50' : 'border-red-500 bg-red-50/50'}`;
+                } else {
+                    expBox.classList.add('hidden');
+                }
+
+                // Update Flag state button
+                const isFlagged = !!this.state.flagged[this.state.currentIndex];
+                const flagIcon = document.getElementById('flag-icon');
+                const flagText = document.getElementById('flag-text');
+                const flagBtn = document.getElementById('flag-btn');
+
+                if (isFlagged) {
+                    flagIcon.className = 'fa-solid fa-flag text-amber-500';
+                    flagText.textContent = 'Sinalizada';
+                    flagBtn.classList.add('bg-amber-50', 'border-amber-300');
+                } else {
+                    flagIcon.className = 'fa-regular fa-flag text-gray-400';
+                    flagText.textContent = 'Sinalizar';
+                    flagBtn.classList.remove('bg-amber-50', 'border-amber-300');
+                }
+
+                // Update Next/Prev buttons
+                document.getElementById('btn-prev').disabled = this.state.currentIndex === 0;
+                document.getElementById('btn-prev').style.opacity = this.state.currentIndex === 0 ? '0.5' : '1';
+
+                const isLast = this.state.currentIndex === total - 1;
+                document.getElementById('btn-next').classList.toggle('hidden', isLast);
+                document.getElementById('btn-finish').classList.toggle('hidden', !isLast);
+
+                this.saveActiveState();
+            }
+
+            selectOption(idx) {
+                // In practice mode, allow changing if desired, or lock
+                this.state.userAnswers[this.state.currentIndex] = idx;
+                this.renderQuestion();
+            }
+
+            toggleFlagCurrent() {
+                const cur = this.state.currentIndex;
+                this.state.flagged[cur] = !this.state.flagged[cur];
+                this.renderQuestion();
+            }
+
+            nextQuestion() {
+                if (this.state.currentIndex < this.state.questions.length - 1) {
+                    this.state.currentIndex++;
+                    this.renderQuestion();
+                }
+            }
+
+            prevQuestion() {
+                if (this.state.currentIndex > 0) {
+                    this.state.currentIndex--;
+                    this.renderQuestion();
+                }
+            }
+
+            startTimer() {
+                if (this.state.timerInterval) clearInterval(this.state.timerInterval);
+                this.state.timerInterval = setInterval(() => {
+                    this.state.examTimeLeft--;
+                    if (this.state.examTimeLeft <= 0) {
+                        clearInterval(this.state.timerInterval);
+                        alert('Tempo do exame esgotado! Submetendo suas respostas automaticamente.');
+                        this.finishQuiz();
+                    } else {
+                        this.updateTimerDisplay();
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                const totalSec = this.state.examTimeLeft;
+                const hrs = Math.floor(totalSec / 3600);
+                const mins = Math.floor((totalSec % 3600) / 60);
+                const secs = totalSec % 60;
+                this.dom.timerDisplay.textContent = 
+                    `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            toggleGridDrawer() {
+                const isHidden = this.dom.drawer.classList.contains('hidden');
+                if (isHidden) {
+                    this.renderGrid();
+                    this.dom.drawer.classList.remove('hidden');
+                } else {
+                    this.dom.drawer.classList.add('hidden');
+                }
+            }
+
+            filterGrid(filter) {
+                this.state.gridFilter = filter;
+                ['all', 'ans', 'pnd', 'flg'].forEach(f => {
+                    const btn = document.getElementById(`grid-flt-${f}`);
+                    if (btn) {
+                        btn.classList.remove('bg-aws-navy', 'text-white');
+                        btn.classList.add('bg-gray-100', 'text-gray-600');
+                    }
+                });
+                const keyMap = { all: 'all', answered: 'ans', pending: 'pnd', flagged: 'flg' };
+                const activeBtn = document.getElementById(`grid-flt-${keyMap[filter]}`);
+                if (activeBtn) {
+                    activeBtn.classList.remove('bg-gray-100', 'text-gray-600');
+                    activeBtn.classList.add('bg-aws-navy', 'text-white');
+                }
+                this.renderGrid();
+            }
+
+            renderGrid() {
+                const container = this.dom.gridContainer;
+                container.innerHTML = '';
+
+                this.state.questions.forEach((q, idx) => {
+                    const isAnswered = this.state.userAnswers[idx] !== undefined;
+                    const isCurrent = idx === this.state.currentIndex;
+                    const isFlagged = !!this.state.flagged[idx];
+
+                    // Filtering check
+                    if (this.state.gridFilter === 'answered' && !isAnswered) return;
+                    if (this.state.gridFilter === 'pending' && isAnswered) return;
+                    if (this.state.gridFilter === 'flagged' && !isFlagged) return;
+
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `relative py-2.5 rounded-lg text-xs font-bold border transition flex flex-col items-center justify-center `;
+
+                    if (isCurrent) {
+                        btn.className += 'bg-aws-navy text-white border-aws-navy ring-2 ring-aws-orange';
+                    } else if (isAnswered) {
+                        btn.className += 'bg-blue-50 border-blue-400 text-blue-800';
+                    } else {
+                        btn.className += 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100';
+                    }
+
+                    btn.onclick = () => {
+                        this.state.currentIndex = idx;
+                        this.renderQuestion();
+                        this.toggleGridDrawer();
+                    };
+
+                    btn.innerHTML = `
+                        <span>${idx + 1}</span>
+                        ${isFlagged ? '<span class="absolute -top-1 -right-1 text-xs">🚩</span>' : ''}
+                    `;
+                    container.appendChild(btn);
+                });
+            }
+
+            finishQuizConfirm() {
+                const unanswered = this.state.questions.length - Object.keys(this.state.userAnswers).length;
+                let msg = "Deseja finalizar a prova e visualizar seu resultado?";
+                if (unanswered > 0) {
+                    msg = `Atenção: Você possui ${unanswered} questão(ões) pendente(s). Deseja finalizar assim mesmo?`;
+                }
+                this.showModal('Finalizar Simulado', msg, () => this.finishQuiz());
+            }
+
+            finishQuiz() {
+                if (this.state.timerInterval) clearInterval(this.state.timerInterval);
+                this.dom.headerQuizInfo.classList.add('hidden');
+
+                // Calculate Score
+                let correctCount = 0;
+                const
